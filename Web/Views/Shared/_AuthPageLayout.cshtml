@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MovieApp</title>
+
+    <!-- CSS -->
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css">
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css">
+	<link rel="stylesheet" href="~/css/ionicons.min.css">
+	<link rel="stylesheet" href="~/css/main.css">
+
+    <!-- Favicons -->
+	<link rel="icon" type="image/png" href="~/icon/favicon-32x32.png" sizes="32x32">
+	<link rel="apple-touch-icon" href="~/icon/favicon-32x32.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="~/icon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="~/icon/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="~/icon/apple-touch-icon-144x144.png">
+</head>
+<body class="body">
+	<!-- content -->
+		@RenderBody()
+	<!-- end content -->
+	<script src="~/lib/jquery/dist/jquery-3.3.1.min.js"></script>
+	<script>
+		$('.section--bg, .details__bg').each( function() {
+			if ($(this).attr("data-bg")){
+				$(this).css({
+					'background': 'url(' + $(this).data('bg') + ')',
+					'background-position': 'center center',
+					'background-repeat': 'no-repeat',
+					'background-size': 'cover'
+				});
+			}
+		});
+	</script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

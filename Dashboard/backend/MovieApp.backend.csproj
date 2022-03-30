@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.22" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Script Include="dist\assets\AboutView.ab071ea6.css" />
+    <Script Include="dist\assets\AboutView.fd383ce4.js" />
+    <Script Include="dist\assets\index.038ca730.css" />
+    <Script Include="dist\assets\index.a270b05d.js" />
+    <Script Include="dist\assets\logo.da9b9095.svg" />
+    <Script Include="dist\assets\vendor.a35b2b85.js" />
+    <Script Include="dist\favicon.ico" />
+    <Script Include="dist\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\MovieApp.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\MovieApp.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
