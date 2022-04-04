@@ -20,11 +20,11 @@
 				v-for="(movie, index) in movies"
 				:key="index" :title="movie.title"
 				:description="movie.description"
-				:categories="movie.genres"
+				:categories="movie.categories"
 				:image="movie.image"
 				:appendClass="'change-item'"
-			><button class="btn btn-sm movie_item-action_btn" @click="openChooseMovieModal(index)">Choose another movie</button></MovieItem>
-			<ChooseMovie v-show="modalOpen"></ChooseMovie>
+			><button class="btn btn-sm movie_item-btn_action movie_item-btn_edit" @click="openChooseMovieModal(index)">Choose another movie</button></MovieItem>
+			<ChooseMovie></ChooseMovie>
 		</div>
 	</div>
 </template>
@@ -40,15 +40,14 @@ export default {
 		return {
 			title: 'NEW ITEMS OF THIS SEASON',
 			slideItemsCount: 6,
-			modalOpen: false,
 			movies: [],
 			selectedElement: 0
 		}
 	},
 	methods: {
 		openChooseMovieModal(index) {
-			this.selectedElement = index; 
-			this.modalOpen = true;
+			this.selectedElement = index;
+      this.emitter.emit('chooseMovieModal', true);
 		}
 	},
 	components: {
@@ -60,13 +59,9 @@ export default {
 			.then(r => this.movies = r.data);
 
 		this.emitter.on('chooseMovie', (movieId) => {
-		axios.get(`/dashboard/movies/${movieId}`)
-			.then(r => this.movies[this.selectedElement] = r.data);
-		})
-
-		this.emitter.on('closeModal', (e) => {
-			this.modalOpen = e;
-		})
+      axios.get(`/dashboard/movies/${movieId}`)
+        .then(r => this.movies[this.selectedElement] = r.data);
+		});
 	}
 }
 </script>

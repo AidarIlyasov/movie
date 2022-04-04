@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MovieApp.Application.Interfaces;
 using System.Linq;
-using System.Net;
 using MovieApp.Application.Entities;
 using MovieApp.Infrastructure.Data;
-using MovieApp.Application.DTO;
+using MovieApp.Application.DTO.CategoryAggregate;
 
 namespace MovieApp.Infrastructure.Data.Repositories
 {
@@ -27,15 +27,16 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return db.Categories.Single(g=> g.Link == name);
         }
 
-        public List<CategoryDto> GetCategories()
+        public List<CategoryDetailDto> GetCategories()
         {
-            return db.Categories.Select(g => new CategoryDto
+            return db.Categories.Select(c => new CategoryDetailDto
             {
-                Id = g.Id,
-                Name = g.Name,
-                Link = g.Link
+                Id = c.Id,
+                Name = c.Name,
+                Link = c.Link,
+                MoviesCount = c.Movies.Count()
             })
-            .OrderBy(g => g.Name).ToList();
+            .OrderBy(c => c.Name).ToList();
         }
     }
 }

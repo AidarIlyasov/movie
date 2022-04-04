@@ -1,15 +1,17 @@
 using MovieApp.Infrastructure.Data;
 using MovieApp.Application.Entities;
 using MovieApp.Application.DTO;
+using MovieApp.Application.DTO.MovieAggregate;
 using MovieApp.Application.Entities.MovieAggregate;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using MovieApp.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace MovieApp.Infrastructure.Services
 {
@@ -18,20 +20,23 @@ namespace MovieApp.Infrastructure.Services
         private readonly ApplicationContext _context;
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
+        private readonly IFileManager _fileManager;
         public MovieService(
             ApplicationContext context,
             IMovieRepository movieRepository,
-            IMapper mapper
+            IMapper mapper,
+            IFileManager fileManager
         )
         {
             _context = context;
             _movieRepository = movieRepository;
             _mapper = mapper;
+            _fileManager = fileManager;
         }
 
         public MovieDto GetMovie(int id)
         {
-            Movie movie = _movieRepository.GetMovie(id);
+            var movie = _movieRepository.GetMovie(id);
 
             return new MovieDto {
                 Id = movie.Id,
@@ -61,12 +66,21 @@ namespace MovieApp.Infrastructure.Services
             };
         }
 
-        public Movie UpdateMovie(UpdateMovieDto request)
+        public async Task<Movie> UpdateMovie(UpdateMovieDto request)
         {
-            var movie = _context.Movies
-                .Where(p => p.Id == request.Id)
-                .Include(p => p.Categories)
-                .FirstOrDefault();    
+            var movie = _movieRepository.GetMovie(request.Id);
+
+            // if (movie == null || movie.Id != request.Id)
+            // {
+            //     throw new Exception("movie not found");
+            // }
+
+            movie.Title = request.Title;
+            movie.Description = request.Description;
+            movie.Slug = request.Slug;
+            movie.Duration = request.Duration;
+            movie.RestrictionId = request.Restriction.Id;
+            movie.Release_at = DateTime.Parse(request.Release);
 
             movie.Categories = _context.Categories
                                 .AsEnumerable()
@@ -77,80 +91,57 @@ namespace MovieApp.Infrastructure.Services
                                 .AsEnumerable()
                                 .Where(cm => request.Countries.Any(c => c.Id == cm.Id))
                                 .ToList();
+            movie.Qualities = _context.Qualities
+                                .AsEnumerable()
+                                .Where(qm => request.Qualities.Any(q => q.Id == qm.Id))
+                                .ToList();
 
-            // var countyMovie = _context.CountryMovies.Where(cm => cm.MovieId == request.Id);
-           
-            // countyMovie = _context.CountryMovies.Where(m => request.Countries.Any(c => c.Id == m.CountryId));
+            // movie.Photos =
+            //var photos = await CreatePhotos(request.Photos);
 
-            // _context.Entry(countyMovie).State = EntityState.Modified;
             _context.Entry(movie).State = EntityState.Modified;
 
-            _context.SaveChanges();
-
-            // var existMovie = _movieRepository
-            //     .GetMovieByIdTest(request.Id);
-
-
-            
-            // existMovie.Id = request.Id;
-            // existMovie.Title = request.Title;
-            // existMovie.Slug = request.Slug;
-            // existMovie.Description = request.Description;
-
-            // var countriesToRemove = _context.CountryMovies.Where(cm => cm.MovieId == request.Id).ToList();
-            // _context.CountryMovies.RemoveRange(countriesToRemove);
-            // _context.CountryMovies.AddRange(request.Countries.Select(cm => new CountryMovie {
-            //     MovieId = request.Id,
-            //     CountryId = cm.Id
-            // }));
-
-
-            // // 2. remove all ids already in database from requestStudent
-            // request.Categories.RemoveAll(sc => existMovie.Categories.Exists(
-            //     c => c.Id == sc.Id && existMovie.Id == request.Id
-            //     ));
-
-            // // 1. remove all except the "old"
-            // existMovie.Categories.Clear();
-
-            // // 3. add all nwe courses not yet seen in the database
-            // existMovie.Categories.AddRange(request.Categories.Select(c => new Category {
-            //     Id = c.Id,
-            //     Name = c.Name,
-            //     Link = c.Link
-            // }));
-
-            // _context.Update(existMovie);
-            // _context.ChangeTracker.DetectChanges();
-            // Console.WriteLine(_context.ChangeTracker.DebugView.LongView);
+            await _context.SaveChangesAsync();
 
             return movie;
         }
-        private List<Category> AddCategories(List<CategoryDto> categories, Movie movie)
+
+        public async Task<List<CategoryDto>> RemoveCategory(int movieId, int catId)
         {
-            List<Category> newCategories = new List<Category>();
+            var movie = _movieRepository.GetMovie(movieId);
+            var category = _context.Categories.Single(c => c.Id == catId);
+            
+            movie.Categories.Remove(category);
 
-            foreach(var c in categories)
+            await _context.SaveChangesAsync();
+
+            return movie.Categories.Select(c => new CategoryDto
             {
-                movie.Categories.Add(new Category {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Link = c.Link
-                });
-            }
-
-            return newCategories;
+                Id = c.Id,
+                Name = c.Name,
+                Link = c.Link
+            }).ToList();
         }
 
-        public void AddCountry(IEnumerable<CountryDto> countries, Movie movie)
+        private async Task<List<Photo>> CreatePhotos(List<PhotoDto> photos)
         {
-            // foreach(var country in countries)
-            // {
-            //     _context.CountryMovies.Add(new CountryMovie {
-            //         MovieId = movie.Id,
-            //         CountryId = country.Id
-            //     });
-            // }
+            var createdPhotos = new List<Photo>();
+                
+            foreach (var photo in photos)
+            {
+                if (photo.Image != null)
+                {
+                    var createdImage = await _fileManager.SaveImage(photo.Image, photo.Id.ToString());
+                    createdPhotos.Add(new Photo
+                    {
+                        Id = photo.Id,
+                        Name = createdImage.Name,
+                        IsPoster = photo.IsPoster
+                    });
+                }
+            }
+
+            return createdPhotos;
         }
     }
 }

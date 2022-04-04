@@ -1,5 +1,5 @@
 ﻿<template>
-  <div :class="'col-4 movie-item pb-2 ' + appendClass">
+  <div :class="'col-4 movie-item mb-2 ' + appendClass">
     <slot></slot>
     <div class="movie-card card">
       
@@ -30,15 +30,16 @@ export default {
 </script>
 
 <style scoped>
-  .movei-item {
+  .movie-item {
     position: relative;
-  }
-  .movie-item:nth-child(3) {
     padding: 0;
   }
-  .movie-item:not(:nth-child(3)) {
-    padding-left: 0;
+  .movie-item:nth-child(3) {
+    margin-left: 0;
   }
+  /*.movie-item:not(:nth-child(3)) {*/
+  /*  padding-left: 0;*/
+  /*}*/
   .move-cat_list-name:not(:last-child)::after {
     content: ',';
     margin-right: 5px;
@@ -62,8 +63,8 @@ export default {
     z-index: 1;
     position: absolute;
     left: 0;
-    top: calc(50% - 35px);
-    width: 95%;
+    top: 227px;
+    width: 100%;
     height: 50px;
     background: rgba(3, 3, 3, .8);
   }

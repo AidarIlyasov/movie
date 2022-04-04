@@ -6,9 +6,9 @@
       :key="index"
       :title="movie.title"
       :description="movie.description"
-      :categories="movie.genres"
+      :categories="movie.categories"
       :appendClass="'change-item'"
-    ><a :href="'/movies/'+ movie.id +'/edit'" class="btn btn-sm movie_item-action_btn" role="button">Edit item</a></MovieItem>
+    ><a :href="'/movies/'+ movie.id +'/edit'" class="btn btn-sm movie_item-btn_action movie_item-btn_edit" role="button">Edit item</a></MovieItem>
   </div>
 </template>
 

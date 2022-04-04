@@ -2,12 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MoviesView from '../views/Movie/MoviesView.vue'
 import MovieEditView from '../views/Movie/MovieEditView.vue'
-import CatalogView from '../views/CatalogView.vue'
+import CategoriesView from '../views/Category/CategoriesView.vue'
 import ActorsView from '../views/ActorsView.vue'
 import UsersView from '../views/UsersView.vue'
 import PricingPlanView from '../views/PricingPlanView.vue'
 
 import SeasonMovies from '../views/Home/SeasonMovies.vue'
+import CategoryMovies from "../views/Category/CategoryMovies.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,9 +34,14 @@ const router = createRouter({
       component: MovieEditView
     },
     {
-      path: '/catalog',
-      name: 'catalog',
-      component: CatalogView
+      path: '/categories',
+      name: 'categories',
+      component: CategoriesView
+    },
+    {
+      path: '/categories/:id/',
+      name: 'category-movies',
+      component: CategoryMovies
     },
     {
       path: '/actors',

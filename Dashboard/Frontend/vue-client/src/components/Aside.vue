@@ -16,25 +16,31 @@
           <RouterLink to="/movies"><i class="fa fa-file-movie-o"></i>Movies Settings</RouterLink>
         </li>
         <li class="list-group-item">
-          <RouterLink to="/catalog"><i class="fa fa-list-ul"></i>Catalog page</RouterLink>
+          <RouterLink to="/categories"><i class="fa fa-list-ul"></i>Categories page</RouterLink>
         </li>
         <li class="list-group-item">
           <RouterLink to="/actors"><i class="fa fa-star"></i>Actors</RouterLink>
         </li>
         <li class="list-group-item">
+          <RouterLink to="/qualities"><i class="fa fa-circle-o-notch" aria-hidden="true"></i>Qualities</RouterLink>
+        </li>
+        <li class="list-group-item">
+          <RouterLink to="/restrictions"><i class="fa fa-ban" aria-hidden="true"></i>Restrictions</RouterLink>
+        </li>
+        <li class="list-group-item">
+          <RouterLink to="/countries"><i class="fa fa-globe" aria-hidden="true"></i>Countries</RouterLink>
+        </li>
+        <li class="list-group-item">
           <RouterLink to="/users"> <i class="fa fa-users"></i>Users</RouterLink>
         </li>
         <li class="list-group-item">
-          <a href="activity.html"><i class="fa fa-area-chart"></i>Charts</a>
+          <a ><i class="fa fa-area-chart"></i>Charts</a>
         </li>
         <li class="list-group-item">
           <RouterLink to="/pricing"><i class="fa fa-money"></i>Pricing plan</RouterLink>
         </li>
-<!--        <li class="list-group-item">-->
-<!--          <RouterLink to="/about"><i class="fa fa-money"></i>About page</RouterLink>-->
-<!--        </li>-->
         <li class="list-group-item">
-          <a href="message.html">
+          <a href="#">
             <i class="menu-icon icon-inbox"></i>Inbox
             <span class="label-green pull-right">
                                     11
@@ -42,7 +48,7 @@
           </a>
         </li>
         <li class="list-group-item">
-          <a href="task.html">
+          <a href="#">
             <i class="menu-icon icon-tasks"></i>Tasks
             <span class="label-orange pull-right">
                                     19
@@ -57,10 +63,10 @@
           </a>
         </li>
         <li class="list-group-item">
-          <a href="activity.html"><i class="menu-icon icon-bullhorn"></i>News Feed </a>
+          <a href="#"><i class="menu-icon icon-bullhorn"></i>News Feed </a>
         </li>
         <li class="list-group-item">
-          <a href="message.html">
+          <a href="#">
             <i class="menu-icon icon-inbox"></i>Inbox
             <b class="label green pull-right">
               11
@@ -68,7 +74,7 @@
           </a>
         </li>
         <li class="list-group-item">
-          <a href="task.html">
+          <a href="#">
             <i class="menu-icon icon-tasks"></i>Tasks
             <b class="label orange pull-right">
               19

@@ -136,20 +136,27 @@ li.profile-dropdown .dropdown-menu > li > a:hover {
     border-top: 1px solid #d5d5d5;
 }
 
-.movie_item-action_btn:hover {
+.movie_item-btn_action:hover {
     color: #fff;
 }
-.movie_item-action_btn {
+.movie_item-btn_action {
     position: absolute;
-    top: calc(50% - 25px);
+    top: 237px;
     z-index: 2;
     display: none;
     margin: 0 auto;
     color: #fff;
     font-weight: bold;
+}
+.movie_item-btn_edit {
+    left: 8px;
     background: #78ba00;
 }
+.movie_item-btn_remove {
+    right: 8px;
+    background: #a71d2a;
+}
 
-.change-item:hover .movie_item-action_btn {
+.change-item:hover .movie_item-btn_action {
     display: block;
 }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MovieApp.Application.Entities;
-using MovieApp.Application.DTO;
+using MovieApp.Application.DTO.CategoryAggregate;
 
 namespace MovieApp.Application.Interfaces
 {
@@ -9,7 +10,7 @@ namespace MovieApp.Application.Interfaces
         public Category GetCategory(int id);
 
         public Category GetCategory(string name);
-        public List<CategoryDto> GetCategories();
+        public List<CategoryDetailDto> GetCategories();
         // void AddCategory(Movie movie);
         // void UpdateCategory(Movie movie);
         // void RemoveCategory(int Id);
