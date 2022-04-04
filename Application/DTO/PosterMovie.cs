@@ -8,13 +8,13 @@ namespace MovieApp.Application.DTO
 {
     public class PosterMovie
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Link { get; set; }
-        public string Image { get; set; }
-        public string Description { get; set; }
-        public double Raiting { get; set; }
-        public List<Category> Categories { get; set; }
+        public int Id { get; }
+        public string Title { get; }
+        public string Link { get; }
+        public string Image { get; }
+        public string Description { get; }
+        public double Rating { get; }
+        public List<CategoryDto> Categories { get; }
 
         public PosterMovie(int id, string title, string link, List<Photo> photos, string description, int likes, int dislikes, IEnumerable<Category> categories)
         {
@@ -23,12 +23,12 @@ namespace MovieApp.Application.DTO
             Link = link;
             Image = photos.Any() ? photos.Single(p => p.IsPoster).Name : "default";
             Description = description;
-            // Raiting = Math.Round(1.0 * likes / (likes + dislikes) * 10, 1);
-            Raiting = 9.6;
-            Categories = categories.Select(g => new Category
+            Rating = Math.Round(1.0 * likes / (likes + dislikes) * 10, 1);
+            Categories = categories.Select(c => new CategoryDto()
             {
-                Name = WordRegister.FirstCharToUpper(g.Name),
-                Link = g.Link
+                Id = c.Id,
+                Name = WordRegister.FirstCharToUpper(c.Name),
+                Link = c.Link
             }).ToList();
         }
     }

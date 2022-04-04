@@ -261,7 +261,7 @@ export default {
         formData.append(key, this.movie[key]);
       }
 
-      axios.post(`/dashboard/movies/${this.$route.params.id}`, formData, {
+      axios.put(`/dashboard/movies/${this.$route.params.id}`, formData, {
         headers: {
           'content-type': `multipart/form-data; boundary=${formData._boundary}`
           }

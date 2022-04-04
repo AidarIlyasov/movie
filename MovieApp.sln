@@ -15,6 +15,10 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontend", "Dashboard\Front
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieApp.backend", "Dashboard\backend\MovieApp.backend.csproj", "{4C4956E5-1561-4E3D-9A1C-2EA4A0396570}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieApp.Tests", "MovieApp.Tests\MovieApp.Tests.csproj", "{D3EDC783-63BC-4953-A15B-A7DBFFA8366C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieApp.Dashboard.Tests", "MovieApp.Dashboard.Tests\MovieApp.Dashboard.Tests.csproj", "{CBDAFBDF-88C6-4DB8-A91A-184D5AFEB807}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{4C4956E5-1561-4E3D-9A1C-2EA4A0396570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4956E5-1561-4E3D-9A1C-2EA4A0396570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4956E5-1561-4E3D-9A1C-2EA4A0396570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3EDC783-63BC-4953-A15B-A7DBFFA8366C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3EDC783-63BC-4953-A15B-A7DBFFA8366C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3EDC783-63BC-4953-A15B-A7DBFFA8366C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3EDC783-63BC-4953-A15B-A7DBFFA8366C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBDAFBDF-88C6-4DB8-A91A-184D5AFEB807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDAFBDF-88C6-4DB8-A91A-184D5AFEB807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDAFBDF-88C6-4DB8-A91A-184D5AFEB807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDAFBDF-88C6-4DB8-A91A-184D5AFEB807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

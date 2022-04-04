@@ -2,14 +2,14 @@ using MovieApp.Application.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace MovieApp.Application.DTO
+namespace MovieApp.Application.DTO.MovieAggregate
 {
     public class UpdateMovieDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public float Duration { get; set; }
+        public int Duration { get; set; }
         public string Slug { get; set; }
         public string Release { get; set; }
         public RestrictionDto Restriction { get; set; }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using MovieApp.Application.Interfaces;
 using MovieApp.Application.DTO;
+using MovieApp.Application.DTO.MovieAggregate;
 using MovieApp.Application.Entities.MovieAggregate;
 using MovieApp.Application.Entities;
 using MovieApp.Application.Helpers;
@@ -46,15 +47,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return RetrieveSingleMovie()
                     .FirstOrDefault(x => x.Slug == slug);
         }
-
-        public Movie GetMovieByIdTest(int id)
-        {
-            return db.Movies
-                .AsNoTracking()
-                .Include(c => c.Categories)
-                .FirstOrDefault(x => x.Id == id);
-        }
-
+        
         public Movie GetMovie(int id)
         {
             return db.Movies
@@ -133,15 +126,21 @@ namespace MovieApp.Infrastructure.Data.Repositories
                 m.Id, m.Title, m.Slug, m.Photos, m.Description, m.Likes, m.Dislikes, m.Categories)).ToList();
         }
 
-        public List<ThinMovieDto> GetMoviesByGenre(int genreId)
+        public List<ThinMovieDto> GetMoviesByCategory(int catId)
         {
             return db.Movies
-                .Where(m => m.Categories.Any(g => g.Id == genreId))
+                .Where(m => m.Categories.Any(g => g.Id == catId))
                 .Select(m => new ThinMovieDto {
                     Id = m.Id,
                     Slug = m.Slug,
                     Title = m.Title,
-                    Photo = m.Photos.FirstOrDefault(p => p.IsPoster)
+                    Photo = m.Photos.FirstOrDefault(p => p.IsPoster),
+                    Categories = m.Categories.Select(c => new CategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Link = c.Link
+                    }).ToList()
                 })
                 .ToList();
         }
@@ -156,60 +155,6 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return query.Select(m => new PosterMovie(
                 m.Movie.Id, m.Movie.Title, m.Movie.Slug, m.Movie.Photos, m.Movie.Description, m.Movie.Likes, m.Movie.Dislikes, m.Movie.Categories)).ToList();    
         }
-        public int UpdateMovie(UpdateMovieDto request)
-        {
-
-                // foreach (PhotoDto photo in request.Photos)
-                // {
-                //     if (photo.Image != null)
-                //         photo.Name = await _fileManager.SaveImage(photo.Image, request.Id.ToString());
-                // }
-
-                // var movie = new Movie
-                // {
-                //     Id = request.Id,
-                //     Title = request.Title,
-                //     Slug = request.Slug,
-                //     Description = request.Description,
-                //     // Categories = request.Categories.Select(x => new Category {
-                //     //     Id = x.Id,
-                //     //     Name = x.Name,
-                //     //     Link = x.Link
-                //     // }).ToList(),
-                //     // Qualities = request.Qualities.Select(q => new Quality {
-                //     //     Id = q.Id,
-                //     //     Name = q.Name
-                //     // }),
-                //     // Restriction = new Restriction {
-                //     //     Id = request.Restriction.Id,
-                //     //     Type = request.Restriction.Type,
-                //     //     Name = request.Restriction.Name,
-                //     // },
-                //     Duration = (int)request.Duration * 60,
-                //     Release_at = DateTime.Parse(request.Release),
-                //     // Countries = request.Countries.Select(c => new Country {
-                //     //     Id = c.Id,
-                //     //     Name = c.Name
-                //     // }),
-                //     Photos = request.Photos.Select(p => new Photo {
-                //         Id = p.Id,
-                //         Name = p.Name
-                //     }).ToList()
-                // };
-
-
-                // try {
-                //     db.Movies.Update(movie);
-                // }
-                // catch (Exception e)
-                // {
-                //     throw new Exception(e.Message);
-                // }
-                
-                // return await db.SaveChangesAsync();
-                return 132;
-        }
-
         //
         // public void AddMovie(Movie movie)
         // {

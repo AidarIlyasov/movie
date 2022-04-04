@@ -29,7 +29,6 @@ namespace MovieApp.Application.Entities.MovieAggregate
         public List<Photo> Photos { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
         public List<Review> Reviews { get; set; }
-        
         public List<Category> Categories { get; set; }
          // public ICollection<GenreMovie> GenreMovie { get; set; }
     }
