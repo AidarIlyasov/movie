@@ -32,6 +32,10 @@ export default {
     removeCategoryFromMovie(movieId, movieIndex) {
       axios.delete(`/dashboard/movies/${movieId}/categories/${this.$route.params.id}`)
           .then(r => this.movies[movieIndex].categories = r.data)
+          .then(() => this.$notify({
+              title: `Category was successfully removed`,
+              type: "success"
+          }))
           .catch(e => console.error(e))
           .finally(() => this.preloader = false)
     }

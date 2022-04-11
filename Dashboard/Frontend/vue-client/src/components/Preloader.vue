@@ -18,6 +18,7 @@ export default {
     height: 100vh;
     display: flex;
 		background: #fff;
+    z-index: 5;
     justify-content: center;
     align-items: center;
 	}

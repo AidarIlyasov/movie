@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     closeModal() {
-      console.log(this.name)
       this.emitter.emit(this.name, false);
     },
   }

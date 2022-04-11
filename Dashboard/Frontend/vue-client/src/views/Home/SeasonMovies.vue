@@ -1,5 +1,6 @@
 <template>
 	<div>
+    <Preloader v-show="preloader"></Preloader>
 		<h5 class="mb-2">Home page top</h5>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
@@ -32,6 +33,7 @@
 <script>
 import MovieItem from '../../components/Movie/MovieItem.vue'
 import ChooseMovie from '../../components/Movie/ChooseMovie.vue'
+import Preloader from "../../components/Preloader.vue";
 import axios from 'axios'
 
 export default {
@@ -41,7 +43,8 @@ export default {
 			title: 'NEW ITEMS OF THIS SEASON',
 			slideItemsCount: 6,
 			movies: [],
-			selectedElement: 0
+			selectedElement: 0,
+      preloader: true,
 		}
 	},
 	methods: {
@@ -51,12 +54,15 @@ export default {
 		}
 	},
 	components: {
+    Preloader,
 		MovieItem,
 		ChooseMovie
 	},
 	created() {
 		axios.get('/dashboard/movies/season/')
-			.then(r => this.movies = r.data);
+			.then(r => this.movies = r.data)
+      .catch(e => console.error(e))
+      .finally(() => this.preloader = false);
 
 		this.emitter.on('chooseMovie', (movieId) => {
       axios.get(`/dashboard/movies/${movieId}`)

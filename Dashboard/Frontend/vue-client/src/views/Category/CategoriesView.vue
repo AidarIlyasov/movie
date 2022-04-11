@@ -25,6 +25,7 @@
           <label for="category-link">Category link</label>
           <input type="text" class="form-control form-control-sm" id="category-link" v-model="selectedCategory.link">
         </div>
+        <button class="btn-sm btn-success" @click="saveCategory()">Save</button>
       </template>
     </CustomModal>
   </div>
@@ -49,6 +50,14 @@ export default {
     editCategory(catIndex) {
       this.modalOpen = true;
       this.selectedCategory = this.categories[catIndex];
+    },
+    saveCategory() {
+      axios.put(`/dashboard/categories/${this.selectedCategory.id}/`, this.selectedCategory)
+      .then(r => this.$notify({
+          title: `Category ${r.data.name} was updated`,
+          type: "success"
+        }))
+      .catch(e => console.error(e));
     }
   },
   components: {

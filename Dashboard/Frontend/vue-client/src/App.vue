@@ -1,5 +1,6 @@
 <template>
-    <div>
+  <notifications width="370"></notifications>
+  <div>
       <Navbar></Navbar>
       <div class="wrapper">
         <div class="container">
@@ -26,10 +27,6 @@
           message: ''
         }
       },
-      // created() {
-      //   axios.get('/dashboard/pages')
-      //       .then(r => this.message = r.data);
-      // },
       components: {
         Aside,
         Navbar
@@ -38,5 +35,8 @@
 </script>
 
 <style>
-@import '@/assets/main.css';
+  @import '@/assets/main.css';
+  .vue-notification {
+    font-size: 18px;
+  }
 </style>
