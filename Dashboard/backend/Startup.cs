@@ -7,8 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using MovieApp.Application.Interfaces;
 using MovieApp.Infrastructure.Data;
 using MovieApp.Infrastructure.Data.Repositories;
-using MovieApp.Application.Helpers;
 using MovieApp.Infrastructure.Services;
+using FluentValidation.AspNetCore;
+using MovieApp.Application.DTO;
+using MovieApp.Application.Filters;
+using MovieApp.Application.Validators;
 
 namespace MovieApp.backend
 {
@@ -24,10 +27,10 @@ namespace MovieApp.backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            
+
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("PgsConnection")));
-            services.AddMvc();
+
 
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IMovieRepository, MovieRepository>();
@@ -38,8 +41,12 @@ namespace MovieApp.backend
             services.AddSpaStaticFiles(config => {
                 config.RootPath = "dist";
             });
-
-            services.AddControllers();
+            
+            services.AddControllers(options =>
+                {
+                    options.Filters.Add(new ValidationFilter());
+                })
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RestrictionValidator>());
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
