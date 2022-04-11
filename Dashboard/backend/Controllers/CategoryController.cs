@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieApp.Application.DTO;
 using MovieApp.Application.Entities;
 using MovieApp.Application.Interfaces;
 
@@ -35,6 +36,13 @@ namespace MovieApp.backend.Controllers
         {
             var movies = _movieRepository.GetMoviesByCategory(id);
             return Ok(movies);
+        }
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateCategory(CategoryDto category)
+        {
+            var updatedCategory = _categoryRepository.UpdateCategory(category);
+            return Ok(updatedCategory);
         }
     }
 }

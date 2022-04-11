@@ -3,16 +3,17 @@ using MovieApp.Application.Interfaces;
 using MovieApp.Web.ViewModels;
 using System.Linq;
 using MovieApp.Application.Helpers;
+using MovieApp.Infrastructure.Services;
 
 namespace MovieApp.Web.Controllers
 {
     [Route("[controller]")]
-    public class CatalogController : Controller
+    public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMovieRepository _moveRepository;
             
-        public CatalogController(
+        public CategoryController(
             ICategoryRepository categoryRepository,
             IMovieRepository movieRepository
             )
@@ -29,7 +30,10 @@ namespace MovieApp.Web.Controllers
                 ViewBag.Genres = categoriesList;
 
             var category = _categoryRepository.GetCategory(name);
-            var movies = _moveRepository.GetMovies(category.Id, "duration", 1);
+            var movies = new GetMoviesService(_moveRepository)
+                .SetCategory(category.Id)
+                .SetOrder("duration", true)
+                .GetWithPagination(1, 5);
 
             var model = new MoviesViewModel()
             {
@@ -37,10 +41,10 @@ namespace MovieApp.Web.Controllers
                 BreadcrumbTitle = WordRegister.FirstCharToUpper(name),
                 FilterSelectedCategory = categoriesList.First().Name,
                 Link = name,
-                Movies = movies
+                Movies = movies.Movies
             };
 
-            return View("Category", model);
+            return View("Index", model);
         }
     }
 }
