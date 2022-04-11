@@ -42,16 +42,16 @@ namespace MovieApp.Infrastructure.Data
             string adminPassword = "12345678";
             string adminLogin = "admin";
 
-            Role adminRole = new Role { Id = 1, Name = adminRoleName };
-            Role userRole = new Role { Id = 2, Name = userRoleName };
-            User adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id, Login = adminLogin };
+            var adminRole = new Role { Id = 1, Name = adminRoleName };
+            var userRole = new Role { Id = 2, Name = userRoleName };
+            var adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id, Login = adminLogin };
 
-            var restriction1 = new Restriction { Id = 1, Name = "21" };
-            var restriction2 = new Restriction { Id = 2, Name = "18" };
-            var restriction3 = new Restriction { Id = 3, Name = "16" };
-            var restriction4 = new Restriction { Id = 4, Name = "14" };
-            var restriction5 = new Restriction { Id = 5, Name = "12" };
-            var restriction6 = new Restriction { Id = 6, Name = "6" };
+            var restriction1 = new Restriction { Id = 1, Name = "21+", Link = "2"};
+            var restriction2 = new Restriction { Id = 2, Name = "18+" , Link = "18"};
+            var restriction3 = new Restriction { Id = 3, Name = "16+" , Link = "16"};
+            var restriction4 = new Restriction { Id = 4, Name = "14+" , Link = "14"};
+            var restriction5 = new Restriction { Id = 5, Name = "12+" , Link = "12"};
+            var restriction6 = new Restriction { Id = 6, Name = "6+" , Link = "6"};
 
             var country1 = new Country {Id = 1, Name = "USA", Link = "usa" };
             var country2 = new Country {Id = 2, Name = "France", Link = "france" };
@@ -74,11 +74,11 @@ namespace MovieApp.Infrastructure.Data
             var quality2 = new Quality { Id = 2, Name = "HD" };
             var quality3 = new Quality { Id = 3, Name = "SD" };
 
-            var movie1 = new Movie { Id = 2, Likes = 23, Dislikes = 1, RestrictionId = 2, Title = "Green Mile", Release_at = new DateTime(1999, 4, 18), Duration = 189, Slug = "green-mile", Description = "Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора», каждый из узников которого однажды проходит «зеленую милю» по пути к месту казни. Пол повидал много заключённых и надзирателей за время работы. Однако гигант Джон Коффи, обвинённый в страшном преступлении, стал одним из самых необычных обитателей блока." };
-            var movie2 = new Movie { Id = 3, Likes = 111, Dislikes = 16, RestrictionId = 3, Title = "The Lord of the Rings: The Return of the King", Release_at = new DateTime(2003, 12, 1), Duration = 201, Slug = "the-lord-of-the-rings-the-return-of-the-king", Description = "Повелитель сил тьмы Саурон направляет свою бесчисленную армию под стены Минас-Тирита, крепости Последней Надежды. Он предвкушает близкую победу, но именно это мешает ему заметить две крохотные фигурки — хоббитов, приближающихся к Роковой Горе, где им предстоит уничтожить Кольцо Всевластья." };
-            var movie3 = new Movie { Id = 4, Likes = 78, Dislikes = 50, RestrictionId = 5, Title = "Schindler's List", Release_at = new DateTime(1993, 11, 30), Duration = 195, Slug = "schindlers-list", Description = "Фильм рассказывает реальную историю загадочного Оскара Шиндлера, члена нацистской партии, преуспевающего фабриканта, спасшего во время Второй мировой войны почти 1200 евреев." };
-            var movie4 = new Movie { Id = 5, Likes = 89, Dislikes = 46, RestrictionId = 1, Title = "Forrest Gump", Release_at = new DateTime(1994, 6, 23), Duration = 142, Slug = "forrest-gump", Description = "Сидя на автобусной остановке, Форрест Гамп — не очень умный, но добрый и открытый парень — рассказывает случайным встречным историю своей необыкновенной жизни. С самого малолетства он страдал от заболевания ног, и соседские хулиганы дразнили мальчика, и в один прекрасный день Форрест открыл в себе невероятные способности к бегу.Подруга детства Дженни всегда его поддерживала и защищала, но вскоре дороги их разошлись" };
-            var movie5 = new Movie { Id = 6, Likes = 77, Dislikes = 7, RestrictionId = 4, Title = "Interstellar", Release_at = new DateTime(2014, 1, 26), Duration = 169, Slug = "interstellar", Description = "Когда засуха, пыльные бури и вымирание растений приводят человечество к продовольственному кризису, коллектив исследователей и учёных отправляется сквозь червоточину (которая предположительно соединяет области пространства-времени через большое расстояние) в путешествие, чтобы превзойти прежние ограничения для космических путешествий человека и найти планету с подходящими для человечества условиями." };
+            var movie1 = new Movie { Id = 2, Likes = 23, Dislikes = 1, RestrictionId = 2, Title = "Green Mile", Release = new DateTime(1999, 4, 18), Duration = 189, Slug = "green-mile", Description = "Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора», каждый из узников которого однажды проходит «зеленую милю» по пути к месту казни. Пол повидал много заключённых и надзирателей за время работы. Однако гигант Джон Коффи, обвинённый в страшном преступлении, стал одним из самых необычных обитателей блока." };
+            var movie2 = new Movie { Id = 3, Likes = 111, Dislikes = 16, RestrictionId = 3, Title = "The Lord of the Rings: The Return of the King", Release = new DateTime(2003, 12, 1), Duration = 201, Slug = "the-lord-of-the-rings-the-return-of-the-king", Description = "Повелитель сил тьмы Саурон направляет свою бесчисленную армию под стены Минас-Тирита, крепости Последней Надежды. Он предвкушает близкую победу, но именно это мешает ему заметить две крохотные фигурки — хоббитов, приближающихся к Роковой Горе, где им предстоит уничтожить Кольцо Всевластья." };
+            var movie3 = new Movie { Id = 4, Likes = 78, Dislikes = 50, RestrictionId = 5, Title = "Schindler's List", Release = new DateTime(1993, 11, 30), Duration = 195, Slug = "schindlers-list", Description = "Фильм рассказывает реальную историю загадочного Оскара Шиндлера, члена нацистской партии, преуспевающего фабриканта, спасшего во время Второй мировой войны почти 1200 евреев." };
+            var movie4 = new Movie { Id = 5, Likes = 89, Dislikes = 46, RestrictionId = 1, Title = "Forrest Gump", Release = new DateTime(1994, 6, 23), Duration = 142, Slug = "forrest-gump", Description = "Сидя на автобусной остановке, Форрест Гамп — не очень умный, но добрый и открытый парень — рассказывает случайным встречным историю своей необыкновенной жизни. С самого малолетства он страдал от заболевания ног, и соседские хулиганы дразнили мальчика, и в один прекрасный день Форрест открыл в себе невероятные способности к бегу.Подруга детства Дженни всегда его поддерживала и защищала, но вскоре дороги их разошлись" };
+            var movie5 = new Movie { Id = 6, Likes = 77, Dislikes = 7, RestrictionId = 4, Title = "Interstellar", Release = new DateTime(2014, 1, 26), Duration = 169, Slug = "interstellar", Description = "Когда засуха, пыльные бури и вымирание растений приводят человечество к продовольственному кризису, коллектив исследователей и учёных отправляется сквозь червоточину (которая предположительно соединяет области пространства-времени через большое расстояние) в путешествие, чтобы превзойти прежние ограничения для космических путешествий человека и найти планету с подходящими для человечества условиями." };
             
             
             

@@ -6,6 +6,8 @@ import CategoriesView from '../views/Category/CategoriesView.vue'
 import ActorsView from '../views/ActorsView.vue'
 import UsersView from '../views/UsersView.vue'
 import PricingPlanView from '../views/PricingPlanView.vue'
+import RestrictionsView from "../views/RestrictionsView.vue";
+import CountriesView from "../views/CountriesView.vue";
 
 import SeasonMovies from '../views/Home/SeasonMovies.vue'
 import CategoryMovies from "../views/Category/CategoryMovies.vue";
@@ -47,6 +49,16 @@ const router = createRouter({
       path: '/actors',
       name: 'actors',
       component: ActorsView
+    },
+    {
+      path: '/countries/',
+      name: 'countries',
+      component: CountriesView
+    },
+    {
+      path: '/restrictions/',
+      name: 'restrictions',
+      component: RestrictionsView
     },
     {
       path: '/users',

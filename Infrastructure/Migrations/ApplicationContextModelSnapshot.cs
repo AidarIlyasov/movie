@@ -432,10 +432,10 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Link")
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -446,38 +446,32 @@ namespace MovieApp.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "21",
-                            Type = ""
+                            Name = "21"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "18",
-                            Type = ""
+                            Name = "18"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "16",
-                            Type = ""
+                            Name = "16"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "14",
-                            Type = ""
+                            Name = "14"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "12",
-                            Type = ""
+                            Name = "12"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "6",
-                            Type = ""
+                            Name = "6"
                         });
                 });
 
