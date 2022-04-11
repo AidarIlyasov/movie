@@ -34,41 +34,26 @@ namespace MovieApp.Infrastructure.Services
             _fileManager = fileManager;
         }
 
-        public MovieDto GetMovie(int id)
+        public MovieDto GetMovieBySlug(string slug)
         {
-            var movie = _movieRepository.GetMovie(id);
+            var movie = _movieRepository
+                .GetMovieBySlug(slug);
+            
+            return GetMovie(movie);
+        }
 
-            return new MovieDto {
-                Id = movie.Id,
-                Title = movie.Title,
-                Description = movie.Description,
-                Qualities = movie.Qualities.Select(q => new Quality {
-                    Id = q.Id,
-                    Name = q.Name
-                }).ToList(),
-                Categories = movie.Categories.Select(category => CategoryDto.FromCategory(category)).ToList(),
-                Photos = movie.Photos.Select(photo => PhotoDto.FromPhoto(photo)).ToList(),
-                // Comments = movie.Comments.Select(comment => _mapper.Map<CommentDto>(comment)),
-                // Reviews = movie.Reviews.Select(review => _mapper.Map<ReviewDto>(review)),
-                Countries = movie.Countries.Select(c => new Country {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Link = c.Link
-                }).ToList(),
-                Duration = movie.Duration,
-                Restriction = new Restriction {
-                    Id = movie.Restriction.Id,
-                    Name = movie.Restriction.Name
-                },
-                Release = movie.Release_at.ToString("yyyy-MM-dd"),
-                Slug = movie.Slug,
-                Raiting = Math.Round(1.0 * movie.Likes / (movie.Likes + movie.Dislikes) * 10, 1)
-            };
+        public MovieDto GetMovieById(int id)
+        {
+            var movie = _movieRepository
+                .GetMovieById(id);
+
+            return GetMovie(movie);
         }
 
         public async Task<Movie> UpdateMovie(UpdateMovieDto request)
         {
-            var movie = _movieRepository.GetMovie(request.Id);
+            var movie = _movieRepository
+                .GetMovieById(request.Id);
 
             // if (movie == null || movie.Id != request.Id)
             // {
@@ -80,7 +65,7 @@ namespace MovieApp.Infrastructure.Services
             movie.Slug = request.Slug;
             movie.Duration = request.Duration;
             movie.RestrictionId = request.Restriction.Id;
-            movie.Release_at = DateTime.Parse(request.Release);
+            movie.Release = DateTime.Parse(request.Release);
 
             movie.Categories = _context.Categories
                                 .AsEnumerable()
@@ -108,7 +93,7 @@ namespace MovieApp.Infrastructure.Services
 
         public async Task<List<CategoryDto>> RemoveCategory(int movieId, int catId)
         {
-            var movie = _movieRepository.GetMovie(movieId);
+            var movie = _movieRepository.GetMovieById(movieId);
             var category = _context.Categories.Single(c => c.Id == catId);
             
             movie.Categories.Remove(category);
@@ -142,6 +127,36 @@ namespace MovieApp.Infrastructure.Services
             }
 
             return createdPhotos;
+        }
+
+        private static MovieDto GetMovie(Movie movie)
+        {
+            return new MovieDto {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                Qualities = movie.Qualities.Select(q => new Quality {
+                    Id = q.Id,
+                    Name = q.Name
+                }).ToList(),
+                Categories = movie.Categories.Select(category => CategoryDto.FromCategory(category)).ToList(),
+                Photos = movie.Photos.Select(photo => PhotoDto.FromPhoto(photo)).ToList(),
+                // Comments = movie.Comments.Select(comment => _mapper.Map<CommentDto>(comment)),
+                // Reviews = movie.Reviews.Select(review => _mapper.Map<ReviewDto>(review)),
+                Countries = movie.Countries.Select(c => new Country {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Link = c.Link
+                }).ToList(),
+                Duration = movie.Duration,
+                Restriction = new Restriction {
+                    Id = movie.Restriction.Id,
+                    Name = movie.Restriction.Name
+                },
+                Release = movie.Release.ToString("yyyy-MM-dd"),
+                Slug = movie.Slug,
+                Raiting = Math.Round(1.0 * movie.Likes / (movie.Likes + movie.Dislikes) * 10, 1)
+            };
         }
     }
 }

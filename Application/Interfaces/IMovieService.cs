@@ -8,7 +8,8 @@ namespace MovieApp.Application.Interfaces
 {
     public interface IMovieService
     {
-        MovieDto GetMovie(int id);
+        MovieDto GetMovieById(int id);
+        MovieDto GetMovieBySlug(string slug);
         Task<Movie> UpdateMovie(UpdateMovieDto request);
         Task<List<CategoryDto>> RemoveCategory(int movieId, int catId);
     }

@@ -7,7 +7,7 @@
           <div class="row">
             <Aside></Aside>
             <div class="col-9">
-              <RouterView />
+              <RouterView :key="$route.fullPath" />
             </div>
           </div>
         </div>

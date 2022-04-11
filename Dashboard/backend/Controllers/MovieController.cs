@@ -30,7 +30,7 @@ namespace MovieApp.backend.Controllers
         [HttpGet("{id:int}/edit")]
         public IActionResult EditMovie(int id)
         {
-            var movie = _movieService.GetMovie(id);
+            var movie = _movieService.GetMovieById(id);
             return Ok(movie);
         }
 
@@ -38,6 +38,20 @@ namespace MovieApp.backend.Controllers
         public IActionResult GetSeasonMovies()
         {
             var movies = _movieRepository.GetSeasonMovies();
+            return Ok(movies);
+        }
+
+        [HttpGet("filters")]
+        public IActionResult GetMovies(int category = 0, int restriction = 0, int country = 0, int quality = 0, string order = "", bool asc = true)
+        {
+            var movies = new GetMoviesService(_movieRepository)
+                .SetCategory(category)
+                .SetRestriction(restriction)
+                .SetQuality(quality)
+                .SetCountry(country)
+                .SetOrder(order, asc)
+                .GetWithPagination(1, 5);
+            
             return Ok(movies);
         }
 

@@ -14,7 +14,7 @@
         <td>{{restriction.link}}</td>
         <td>
           <a
-            :href="'/restriction/' + restriction.id"
+            :href="'/movies/filters/restriction=' + restriction.id"
             class="btn btn-sm btn-outline-secondary mr-1"
             title="movies count"
             role="button"

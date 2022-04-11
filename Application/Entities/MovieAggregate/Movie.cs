@@ -7,10 +7,6 @@ namespace MovieApp.Application.Entities.MovieAggregate
 {
     public class Movie
     {
-        // public Movie()
-        // {
-        //     GenreMovie = new HashSet<GenreMovie>();
-        // }
         public int Id { get; set; }
         public string Title { get; set; }
         public string Slug { get; set; }
@@ -20,7 +16,7 @@ namespace MovieApp.Application.Entities.MovieAggregate
         public int Duration { get; set; }
         
         [DataType(DataType.Date)]
-        public DateTime Release_at { get; set; } = new DateTime(1000, 1, 1);
+        public DateTime Release { get; set; } = new DateTime(1000, 1, 1);
         
         public IEnumerable<Quality> Qualities { get; set; }
         public List<Country> Countries { get; set; }
@@ -30,6 +26,5 @@ namespace MovieApp.Application.Entities.MovieAggregate
         public IEnumerable<Comment> Comments { get; set; }
         public List<Review> Reviews { get; set; }
         public List<Category> Categories { get; set; }
-         // public ICollection<GenreMovie> GenreMovie { get; set; }
     }
 }

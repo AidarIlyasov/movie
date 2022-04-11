@@ -25,15 +25,30 @@
           preloader: true
         }
     },
+    methods: {
+      getSeasonMovies() {
+        axios.get('/dashboard/movies/season/')
+            .then(r => this.movies = r.data)
+            .catch(e => console.error(e))
+            .finally(() => this.preloader = false)
+      },
+      getFilteredMovies() {
+          axios.get(`/dashboard/movies/filters?${this.$route.params.filter}`)
+            .then(r => this.movies = r.data.movies)
+            .catch(e => console.error(e))
+            .finally(() => this.preloader = false)
+      }
+    },
     components: {
       MovieItem,
       Preloader
     },
     created() {
-      axios.get('/dashboard/movies/season/')
-			  .then(r => this.movies = r.data)
-        .catch(e => console.error(e))
-        .finally(() => this.preloader = false)
+      if (this.$route.params) {
+        this.getFilteredMovies()
+      } else {
+        this.getSeasonMovies();
+      }
     }
   }
 </script>
