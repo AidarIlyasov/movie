@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApp.Infrastructure.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220405165103_UpdateRestrictionTable")]
+    partial class UpdateRestrictionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,14 +71,10 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Link")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -186,8 +184,7 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -209,16 +206,13 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("CountryCode")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Link")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -245,8 +239,7 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Position")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.HasKey("MovieId", "Position");
 
@@ -294,7 +287,7 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Release")
+                    b.Property<DateTime>("Release_at")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RestrictionId")
@@ -320,7 +313,7 @@ namespace MovieApp.Infrastructure.Migrations
                             Dislikes = 1,
                             Duration = 189,
                             Likes = 23,
-                            Release = new DateTime(1999, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Release_at = new DateTime(1999, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionId = 2,
                             Slug = "green-mile",
                             Title = "Green Mile"
@@ -332,7 +325,7 @@ namespace MovieApp.Infrastructure.Migrations
                             Dislikes = 16,
                             Duration = 201,
                             Likes = 111,
-                            Release = new DateTime(2003, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Release_at = new DateTime(2003, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionId = 3,
                             Slug = "the-lord-of-the-rings-the-return-of-the-king",
                             Title = "The Lord of the Rings: The Return of the King"
@@ -344,7 +337,7 @@ namespace MovieApp.Infrastructure.Migrations
                             Dislikes = 50,
                             Duration = 195,
                             Likes = 78,
-                            Release = new DateTime(1993, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Release_at = new DateTime(1993, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionId = 5,
                             Slug = "schindlers-list",
                             Title = "Schindler's List"
@@ -356,7 +349,7 @@ namespace MovieApp.Infrastructure.Migrations
                             Dislikes = 46,
                             Duration = 142,
                             Likes = 89,
-                            Release = new DateTime(1994, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Release_at = new DateTime(1994, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionId = 1,
                             Slug = "forrest-gump",
                             Title = "Forrest Gump"
@@ -368,7 +361,7 @@ namespace MovieApp.Infrastructure.Migrations
                             Dislikes = 7,
                             Duration = 169,
                             Likes = 77,
-                            Release = new DateTime(2014, 1, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Release_at = new DateTime(2014, 1, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RestrictionId = 4,
                             Slug = "interstellar",
                             Title = "Interstellar"
@@ -410,8 +403,7 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -456,38 +448,32 @@ namespace MovieApp.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Link = "2",
-                            Name = "21+"
+                            Name = "21"
                         },
                         new
                         {
                             Id = 2,
-                            Link = "18",
-                            Name = "18+"
+                            Name = "18"
                         },
                         new
                         {
                             Id = 3,
-                            Link = "16",
-                            Name = "16+"
+                            Name = "16"
                         },
                         new
                         {
                             Id = 4,
-                            Link = "14",
-                            Name = "14+"
+                            Name = "14"
                         },
                         new
                         {
                             Id = 5,
-                            Link = "12",
-                            Name = "12+"
+                            Name = "12"
                         },
                         new
                         {
                             Id = 6,
-                            Link = "6",
-                            Name = "6+"
+                            Name = "6"
                         });
                 });
 
@@ -517,8 +503,7 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -540,8 +525,7 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -571,19 +555,13 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<int?>("RoleId")
                         .HasColumnType("integer");
