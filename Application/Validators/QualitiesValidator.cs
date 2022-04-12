@@ -3,17 +3,13 @@ using MovieApp.Application.DTO;
 
 namespace MovieApp.Application.Validators
 {
-    public class RestrictionValidator: AbstractValidator<RestrictionDto>
+    public class QualitiesValidator: AbstractValidator<QualityDto>
     {
-        public RestrictionValidator()
+        public QualitiesValidator()
         {
             RuleFor(r => r.Name)
                 .NotEmpty()
-                .Length(2, 50);
-
-            RuleFor(r => r.Link)
-                .NotEmpty()
-                .Length(1, 50)
+                .Length(2, 10)
                 .Matches("^[a-zA-Z0-9]*$");
         }
     }

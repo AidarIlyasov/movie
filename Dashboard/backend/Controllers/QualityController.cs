@@ -7,32 +7,80 @@ using System.Linq;
 
 namespace MovieApp.backend.Controllers
 {
-    public class QualityController: Controller
+    [ApiController]
+    [Route("/dashboard/qualities")]
+    public class QualityController: ControllerBase
     {
 
-        private ApplicationContext db;
+        private readonly ApplicationContext _context;
         public QualityController(ApplicationContext context)
         {
-            db = context;
+            _context = context;
         }
 
-        [HttpGet("/dashboard/qualities/{id:int}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetQuality(int id)
         {
-            var quality = db.Qualities
-                        .Where(q => q.Id == id)
-                        .Single();
+            var quality = _context.Qualities
+                .Single(q => q.Id == id);
 
             return Ok(quality);
         }
 
         
-        [HttpGet("/dashboard/qualities")]
+        [HttpGet("")]
         public IActionResult GetQualities(int id)
         {
-            var qualities = db.Qualities.ToList();
+            var qualities = _context.Qualities
+                .Select(q => new
+                {   Id = q.Id,
+                    Name = q.Name,
+                    MoviesCount = q.Movies.Count()
+                })
+                .ToList();
 
             return Ok(qualities);
+        }
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateQuality(QualityDto requestQuality)
+        {
+            var existQuality = _context.Qualities.Single(r => r.Id == requestQuality.Id);
+            
+            if (existQuality == null)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = "Quality not found"
+                });
+            }
+            
+            existQuality.Name = requestQuality.Name;
+            
+            _context.Update(existQuality);
+            _context.SaveChanges();
+
+            return Ok(existQuality);
+        }
+
+        [HttpPost("")]
+        public IActionResult AddQuality(QualityDto requestQuality)
+        {
+            var existQuality = _context.Qualities
+                .Single(r => r.Name.ToLower() == requestQuality.Name.ToLower());
+            
+            if (existQuality != null)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = "Quality with this name has already existed in database"
+                });
+            }
+
+            _context.Add(requestQuality);
+            _context.SaveChanges();
+
+            return Ok(requestQuality);
         }
     }
 }

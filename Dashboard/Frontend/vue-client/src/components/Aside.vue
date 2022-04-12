@@ -16,7 +16,7 @@
           <RouterLink to="/movies"><i class="fa fa-file-movie-o"></i>Movies Settings</RouterLink>
         </li>
         <li class="list-group-item">
-          <RouterLink to="/categories"><i class="fa fa-list-ul"></i>Categories page</RouterLink>
+          <RouterLink to="/categories"><i class="fa fa-list-ul"></i>Categories</RouterLink>
         </li>
         <li class="list-group-item">
           <RouterLink to="/actors"><i class="fa fa-star"></i>Actors</RouterLink>

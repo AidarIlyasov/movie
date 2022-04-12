@@ -8,7 +8,14 @@
       :description="movie.description"
       :categories="movie.categories"
       :appendClass="'change-item'"
-    ><a :href="'/movies/'+ movie.id +'/edit'" class="btn btn-sm movie_item-btn_action movie_item-btn_edit" role="button">Edit item</a></MovieItem>
+    >
+      <a :href="'/movies/'+ movie.id +'/edit'" class="btn btn-sm movie_item-btn_action movie_item-btn_edit" role="button">Edit item</a>
+      <button 
+          v-show="this.$route.params"
+          class="btn btn-sm movie_item-btn_action movie_item-btn_remove"
+          @click="removeItem(movie.id, index)">remove {{this.$route.params.filter}}
+      </button>
+    </MovieItem>
   </div>
 </template>
 
@@ -35,6 +42,16 @@
       getFilteredMovies() {
           axios.get(`/dashboard/movies/filters?${this.$route.params.filter}`)
             .then(r => this.movies = r.data.movies)
+            .catch(e => console.error(e))
+            .finally(() => this.preloader = false)
+      },
+      removeItem(movieId, index) {
+        axios.delete(`/dashboard/movies/${movieId}/categories/${this.$route.params.id}`)
+            .then(r => this.movies[movieIndex].categories = r.data)
+            .then(() => this.$notify({
+              title: `Category was successfully removed`,
+              type: "success"
+            }))
             .catch(e => console.error(e))
             .finally(() => this.preloader = false)
       }

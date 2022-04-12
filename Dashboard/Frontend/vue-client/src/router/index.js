@@ -10,7 +10,7 @@ import RestrictionsView from "../views/RestrictionsView.vue";
 import CountriesView from "../views/CountriesView.vue";
 
 import SeasonMovies from '../views/Home/SeasonMovies.vue'
-import CategoryMovies from "../views/Category/CategoryMovies.vue";
+import QualitiesView from "../views/QualitiesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,11 +46,6 @@ const router = createRouter({
       component: CategoriesView
     },
     {
-      path: '/categories/:id/',
-      name: 'category-movies',
-      component: CategoryMovies
-    },
-    {
       path: '/actors',
       name: 'actors',
       component: ActorsView
@@ -64,6 +59,11 @@ const router = createRouter({
       path: '/restrictions/',
       name: 'restrictions',
       component: RestrictionsView
+    },
+    {
+      path: '/qualities/',
+      name: 'qualities',
+      component: QualitiesView
     },
     {
       path: '/users',

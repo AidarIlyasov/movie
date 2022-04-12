@@ -5,6 +5,7 @@
         listName="restriction"
         :selectedItem="selectedRestriction"
         :operation="this.operation"
+        :editableFields="editableFields"
         @update="updateRestriction()"
         @add="insertRestriction()"
     >
@@ -55,6 +56,7 @@ export default {
     return {
       restrictions: [],
       selectedRestriction: {},
+      editableFields:["name", "link"],
       selectedIndex: 0,
       preloader: true,
       operation: 'Update'
@@ -71,7 +73,7 @@ export default {
       this.emitter.emit('restrictionSettingsModal', true);
     },
     async updateRestriction() {
-      // if (!await this.validateRestrictionsFields()) return;
+       if (!await this.validateFields("Restriction")) return;
 
       axios.put(`/dashboard/restrictions/${this.selectedRestriction.id}/`, this.selectedRestriction)
         .then(r => this.restrictions[this.selectedIndex] = r.data)
@@ -87,7 +89,7 @@ export default {
       this.emitter.emit('restrictionSettingsModal', true);
     },
     async insertRestriction() {
-      if (!await this.validateRestrictionsFields()) return;
+      if (!await this.validateFields("Restriction")) return;
       
       axios.post(`/dashboard/restrictions/`, this.selectedRestriction)
         .then(r => this.restrictions.push(r.data))

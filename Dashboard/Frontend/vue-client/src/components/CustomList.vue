@@ -4,8 +4,7 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Link</th>
+          <th scope="col" class="field-name" v-for="field in editableFields">{{ field }}</th>
           <th scope="col" style="width: 20%">Movies count</th>
           <th scope="col">Options</th>
         </tr>
@@ -17,13 +16,9 @@
     <CustomModal v-show="modalOpen" :name="listName + 'SettingsModal'">
       <template #header>{{operation}} {{listName}}</template>
       <template #body>
-        <div class="form-group">
-          <label for="item-name">{{listName}} name</label>
-          <input type="text" class="form-control form-control-sm" id="item-name" v-model="selectedItem.name">
-        </div>
-        <div class="form-group">
-          <label for="item-link">{{listName}} link</label>
-          <input type="text" class="form-control form-control-sm" id="item-link" v-model="selectedItem.link">
+        <div class="form-group" v-for="field in editableFields">
+          <label for="item-name">{{listName}} {{ field }}</label>
+          <input type="text" class="form-control form-control-sm" id="item-name" v-model="selectedItem[field]">
         </div>
         <button class="btn-sm btn-success" @click="saveChanges()">Save</button>
       </template>
@@ -37,7 +32,8 @@ import CustomModal from "./CustomModal.vue";
 
 export default {
   name: "CustomList.vue",
-  props: { 
+  props: {
+    editableFields: {type: Array},
     listName: { type: String },
     selectedItem: {},
     operation:  { type: String, default: 'Edit' }
@@ -57,6 +53,21 @@ export default {
       this.modalOpen = e;
     })
   },
+  computed: {
+    // getName: {
+    //   get() {
+    //     return this.selectedItem.name?.trim();
+    //   },
+    //   set() {
+    //     return this.selectedItem.name.trim();
+    //   }
+    // },
+    // getLink: {
+    //   get() {
+    //     return this.selectedItem.link?.trim();
+    //   }
+    // }
+  },
   components: {
     CustomModal
   }
@@ -70,5 +81,9 @@ export default {
   
   .custom-list_table {
     background-color: #ffffff;
+  }
+  
+  .field-name:first-letter {
+    text-transform: uppercase;
   }
 </style>

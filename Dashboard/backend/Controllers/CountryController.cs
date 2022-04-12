@@ -1,24 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
-using MovieApp.Application.Entities;
-using MovieApp.Application.DTO;
 using MovieApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using MovieApp.Application.Entities;
 
 namespace MovieApp.backend.Controllers
 {
-    public class CountryController: Controller
+    [ApiController]
+    [Route("/dashboard/countries/")]
+    public class CountryController: ControllerBase
     {
-        ApplicationContext db;
-        public CountryController(ApplicationContext contex)
+        private readonly ApplicationContext _context;
+        public CountryController(ApplicationContext context)
         {
-            db = contex;
+            _context = context;
         }
 
-        [HttpGet("/dashboard/countries/{id:int}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetCountry(int id)
         {
-            var country = db.Countries
+            var country = _context.Countries
                 .AsNoTracking()
                 .Where(c => c.Id == id)
                 .Select(c => new {
@@ -30,19 +31,62 @@ namespace MovieApp.backend.Controllers
             return Ok(country);
         }
 
-        [HttpGet("/dashboard/countries/")]
+        [HttpGet("")]
         public IActionResult GetCountries()
         {
-            var countries = db.Countries
+            var countries = _context.Countries
             .AsNoTracking()
             .Select(c => new {
                 Id = c.Id,
                 Name = c.Name,
-                Link = c.Link
+                Link = c.Link,
+                Code = c.CountryCode,
+                MoviesCount = c.Movies.Count()
             })
             .ToList();
 
             return Ok(countries);
+        }
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateCountry(Country requestCountry)
+        {
+            var existCountry = _context.Countries.Single(r => r.Id == requestCountry.Id);
+            
+            if (existCountry == null)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = "Country not found"
+                });
+            }
+            
+            existCountry.Name = requestCountry.Name;
+            
+            _context.Update(existCountry);
+            _context.SaveChanges();
+
+            return Ok(existCountry);
+        }
+        
+        [HttpPost("")]
+        public IActionResult AddCountry(Country requestCountry)
+        {
+            var existCountry = _context.Countries
+                .Single(r => r.Name == requestCountry.Name || r.Link == requestCountry.Link);
+            
+            if (existCountry != null)
+            {
+                return BadRequest(new
+                {
+                    ErrorMessage = "Country with this name or link has already existed in database"
+                });
+            }
+
+            _context.Add(requestCountry);
+            _context.SaveChanges();
+
+            return Ok(requestCountry);
         }
     }
 }
