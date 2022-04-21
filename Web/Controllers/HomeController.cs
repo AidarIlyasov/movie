@@ -1,8 +1,8 @@
 ﻿#nullable enable
-using System;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Application.Interfaces;
 using MovieApp.Web.ViewModels;
+using MovieApp.Infrastructure.Services;
 
 namespace MovieApp.Web.Controllers
 {
@@ -10,37 +10,37 @@ namespace MovieApp.Web.Controllers
     {
         private readonly IFileManager _fileManager;
         private readonly IMovieRepository _movieRepository;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMovieFiltersService _movieFiltersService;
 
         public HomeController(
             IFileManager fileManager,
             IMovieRepository movieRepository,
-            ICategoryRepository categoryRepository
+            IMovieFiltersService movieFiltersService
         )
         {
             _fileManager = fileManager;
             _movieRepository = movieRepository;
-            _categoryRepository = categoryRepository;
+            _movieFiltersService = movieFiltersService;
         }
         
         [HttpGet("/")]
         public IActionResult Index(string? search = null)
         {
-            if (String.IsNullOrEmpty(search)) return View();
-            ViewBag.Genres = _categoryRepository.GetCategories();
-                
-            var movies = _movieRepository.GetMoviesBySearch(search);
-            
-            var model = new SearchResultViewModel()
+            if (string.IsNullOrEmpty(search)) return View();
+
+            var movies = _movieRepository
+                .GetMoviesBySearch(search.ToLower());
+
+            var model = new SearchResultViewModel
             {
+                FilterOptions = _movieFiltersService.GetFilters(),
                 Movies = movies,
                 BreadcrumbTitle = "Search Results",
-                FilterSelectedGenre = _categoryRepository.GetCategory(1).Name
             };
 
-            return View("~/Views/Catalog/SearchResult.cshtml", model);
+            return View("~/Views/Category/SearchResult.cshtml", model);
         }
-        
+
         [HttpGet("Privacy")]
         public IActionResult Privacy()
         {
@@ -65,11 +65,11 @@ namespace MovieApp.Web.Controllers
             return View();
         }
 
-        [HttpGet("/Image/{image}")]
-        public IActionResult Image(string image)
-        {
-            var mime = image.Substring(image.LastIndexOf('.') + 1);
-            return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
-        }
+        // [HttpGet("/Image/{image}")]
+        // public IActionResult Image(string image)
+        // {
+        //     var mime = image.Substring(image.LastIndexOf('.') + 1);
+        //     return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
+        // }
     }
 }

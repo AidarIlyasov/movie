@@ -2137,6 +2137,7 @@ ul {
   display: block;
   position: relative;
   width: auto;
+  text-transform: capitalize;
   background-color: transparent;
   border: none;
   font-size: 16px;

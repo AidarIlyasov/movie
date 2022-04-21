@@ -389,14 +389,16 @@ $(document).ready(function () {
 	function initializeFirstSlider() {
 		if ($('#filter__years').length) {
 			var firstSlider = document.getElementById('filter__years');
+			var minYear = $('#filter__years-start').attr('data-year');
+			var maxYear = $('#filter__years-end').attr('data-year');
 			noUiSlider.create(firstSlider, {
 				range: {
-					'min': 2000,
-					'max': 2018
+					'min': +minYear,
+					'max': +maxYear
 				},
 				step: 1,
 				connect: true,
-				start: [2005, 2015],
+				start: [minYear, maxYear],
 				format: wNumb({
 					decimals: 0,
 				})

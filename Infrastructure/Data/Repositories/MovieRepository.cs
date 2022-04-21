@@ -17,9 +17,8 @@ namespace MovieApp.Infrastructure.Data.Repositories
 {
     public class MovieRepository : IMovieRepository
     {
-        private readonly ApplicationContext db;
+        private readonly ApplicationContext _context;
         private readonly IMapper _mapper;
-
         private readonly IFileManager _fileManager;
         
         private static readonly Dictionary<string, IOrderBy> OrderFunctions =
@@ -38,7 +37,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
             IFileManager fileManager
         )
         {
-            db = context;
+            _context = context;
             _mapper = mapper;
             _fileManager = fileManager;
         }
@@ -57,7 +56,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         private IQueryable<Movie> GetMovie()
         {
-            return db.Movies
+            return _context.Movies
                     .Include(c => c.Categories)
                     .Include(c => c.Countries)
                     .Include(p => p.Photos)
@@ -68,7 +67,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         public PosterMovie GetPosterMovie(int id)
         {
-            return db.Movies
+            return _context.Movies
                     .Where(m => m.Id == id)
                     .Select(m => new PosterMovie(
                         m.Id, m.Title, m.Slug, m.Photos, m.Description, m.Likes, m.Dislikes, m.Categories))
@@ -77,9 +76,9 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         public List<PosterMovie> GetMoviesBySearch(string searchString)
         {
-            return db.Movies.AsNoTracking()
-                .Where(m => EF.Functions.Like(m.Title, $"%{searchString}%")
-                            ||  EF.Functions.Like(m.Description, $"%{searchString}%"))
+            return _context.Movies.AsNoTracking()
+                .Where(m => EF.Functions.Like(m.Title.ToLower(), $"%{searchString}%")
+                            ||  EF.Functions.Like(m.Description.ToLower(), $"%{searchString}%"))
                 .Select(m => new PosterMovie(
                     m.Id, m.Title, m.Slug, m.Photos, m.Description, m.Likes, m.Dislikes, m.Categories))
                 .ToList();
@@ -88,14 +87,14 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         public IQueryable<Movie> GetMovies()
         {
-            return db.Movies
+            return _context.Movies
                     .AsNoTracking()
                     .AsQueryable();
         }
 
         public List<ThinMovieDto> GetMoviesByCategory(int catId)
         {
-            return db.Movies
+            return _context.Movies
                 .Where(m => m.Categories.Any(g => g.Id == catId))
                 .Select(m => new ThinMovieDto {
                     Id = m.Id,
@@ -114,7 +113,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         public List<PosterMovie> GetSeasonMovies()
         {
-            var query = db.HomePageSettings
+            var query = _context.HomePageSettings
                 .AsNoTracking()
                 .Include(x => x.Movie)
                 .Where(x => x.Position == "season");

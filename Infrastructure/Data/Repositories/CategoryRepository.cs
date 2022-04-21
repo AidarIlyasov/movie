@@ -20,7 +20,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
 
         public Category GetCategory(int id)
         {
-            return _context.Categories.Single(g => g.Id == id);
+            return _context.Categories.SingleOrDefault(g => g.Id == id);
         }
 
         public Category GetCategory(string name)
@@ -28,7 +28,7 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return _context.Categories.Single(g=> g.Link == name);
         }
 
-        public List<CategoryDetailDto> GetCategories()
+        public List<CategoryDetailDto> GetCategoriesDetails()
         {
             return _context.Categories.Select(c => new CategoryDetailDto
             {
@@ -40,9 +40,19 @@ namespace MovieApp.Infrastructure.Data.Repositories
             .OrderBy(c => c.Name).ToList();
         }
 
+        public List<CategoryDto> GetCategories()
+        {
+            return _context.Categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Link = c.Link,
+            }).OrderBy(c => c.Name).ToList();
+        }
+
         public CategoryDto UpdateCategory(CategoryDto requestCategory)
         {
-            var existCategory = _context.Categories.Single(c => c.Id == requestCategory.Id);
+            var existCategory = _context.Categories.SingleOrDefault(c => c.Id == requestCategory.Id);
 
             if (existCategory == null)
             {
@@ -62,6 +72,39 @@ namespace MovieApp.Infrastructure.Data.Repositories
                 Name = existCategory.Name,
                 Link = existCategory.Link
             };
+        }
+
+        public CategoryDto AddCategory(CategoryDto requestCategory)
+        {
+
+            var existCategory = _context.Categories
+                .SingleOrDefault(c => c.Name == requestCategory.Name || c.Link == requestCategory.Link);
+            
+            if (existCategory != null)
+            {
+                throw new Exception("Category with this name or link has already existed in database");
+            }
+
+            var category = new Category
+            {
+                Name = requestCategory.Name,
+                Link = requestCategory.Link
+            };
+            
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+
+            return new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Link = category.Link
+            };
+        }
+
+        public void RemoveCategory(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

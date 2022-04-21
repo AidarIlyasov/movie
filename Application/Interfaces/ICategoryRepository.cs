@@ -11,12 +11,13 @@ namespace MovieApp.Application.Interfaces
         public Category GetCategory(int id);
 
         public Category GetCategory(string name);
-        public List<CategoryDetailDto> GetCategories();
+        public List<CategoryDetailDto> GetCategoriesDetails();
+        public List<CategoryDto> GetCategories();
 
         CategoryDto UpdateCategory(CategoryDto category);
 
-        // void AddCategory(Category movie);
+        CategoryDto AddCategory(CategoryDto category);
 
-        // void RemoveCategory(int Id);
+        void RemoveCategory(int Id);
     }
 }

@@ -27,7 +27,7 @@ namespace MovieApp.backend.Controllers
         [HttpGet("")]
         public IActionResult GetCategories()
         {
-            var categories =  _categoryRepository.GetCategories();
+            var categories =  _categoryRepository.GetCategoriesDetails();
             return Ok(categories);
         }
 
@@ -43,6 +43,13 @@ namespace MovieApp.backend.Controllers
         {
             var updatedCategory = _categoryRepository.UpdateCategory(category);
             return Ok(updatedCategory);
+        }
+
+        public IActionResult AddCategory(CategoryDto category)
+        {
+            var addedCategory = _categoryRepository.AddCategory(category);
+
+            return Ok(addedCategory);
         }
     }
 }

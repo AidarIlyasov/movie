@@ -5,9 +5,8 @@ namespace MovieApp.Web.ViewModels
 {
     public class SearchResultViewModel
     {
+        public FilterOptionsDto FilterOptions { get; set; }
         public List<PosterMovie> Movies { get; set; }
         public string BreadcrumbTitle { get; set; }
-        
-        public string FilterSelectedGenre { get; set; }
     }
 }

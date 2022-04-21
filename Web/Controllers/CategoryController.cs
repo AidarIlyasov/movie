@@ -7,41 +7,40 @@ using MovieApp.Infrastructure.Services;
 
 namespace MovieApp.Web.Controllers
 {
-    [Route("[controller]")]
+    [Route("/categories/")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
         private readonly IMovieRepository _moveRepository;
-            
+        private readonly IMovieFiltersService _movieFiltersService;
+        private readonly ICategoryRepository _categoryRepository;
+
         public CategoryController(
+            IMovieRepository movieRepository,
             ICategoryRepository categoryRepository,
-            IMovieRepository movieRepository
+            IMovieFiltersService movieFiltersService
             )
         {
-            _categoryRepository = categoryRepository;
             _moveRepository = movieRepository;
+            _categoryRepository = categoryRepository;
+            _movieFiltersService = movieFiltersService;
         }
 
-        [HttpGet]
-        [Route("{name:alpha:minlength(3)}")]
+        [HttpGet("{name:alpha:minlength(3)}")]
         public IActionResult GetCategoryMovies(string name)
         {
-            var categoriesList = _categoryRepository.GetCategories();
-                ViewBag.Genres = categoriesList;
-
             var category = _categoryRepository.GetCategory(name);
+            
             var movies = new GetMoviesService(_moveRepository)
                 .SetCategory(category.Id)
                 .SetOrder("duration", true)
                 .GetWithPagination(1, 5);
 
-            var model = new MoviesViewModel()
+            var model = new MoviesViewModel
             {
-                Name = WordRegister.FirstCharToUpper(name),
                 BreadcrumbTitle = WordRegister.FirstCharToUpper(name),
-                FilterSelectedCategory = categoriesList.First().Name,
                 Link = name,
-                Movies = movies.Movies
+                Movies = movies.Movies,
+                FilterOptions = _movieFiltersService.GetFilters()
             };
 
             return View("Index", model);

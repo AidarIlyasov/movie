@@ -3,7 +3,7 @@
 <!-- details -->
 <section class="section details">
 	<!-- details background -->
-	<div class="details__bg" data-bg="/img/home/home__bg.jpg"></div>
+	<div class="details__bg" data-bg="/content/static/home/home__bg.jpg"></div>
 	<!-- end details background -->
 
 	<!-- details content -->
@@ -41,9 +41,9 @@
 
 								<ul class="card__meta">
 									<li><span>Genre:</span>
-										@foreach (var genre in @Model.Categories)
+										@foreach (var category in @Model.Categories)
 									   {
-											<a href="/catalog/@genre.Link">@genre.Name</a>
+											<a href="/catalog/@category.Link">@category.Name</a>
 									   }
 									</li>
 									<li><span>Release year:</span> @Model.Release</li>
