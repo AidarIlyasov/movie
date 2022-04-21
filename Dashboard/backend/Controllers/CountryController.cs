@@ -40,7 +40,7 @@ namespace MovieApp.backend.Controllers
                 Id = c.Id,
                 Name = c.Name,
                 Link = c.Link,
-                Code = c.CountryCode,
+                Code = c.Code,
                 MoviesCount = c.Movies.Count()
             })
             .ToList();
@@ -51,7 +51,7 @@ namespace MovieApp.backend.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateCountry(Country requestCountry)
         {
-            var existCountry = _context.Countries.Single(r => r.Id == requestCountry.Id);
+            var existCountry = _context.Countries.FirstOrDefault(r => r.Id == requestCountry.Id);
             
             if (existCountry == null)
             {
@@ -62,6 +62,8 @@ namespace MovieApp.backend.Controllers
             }
             
             existCountry.Name = requestCountry.Name;
+            existCountry.Link = requestCountry.Link;
+            existCountry.Code = requestCountry.Code;
             
             _context.Update(existCountry);
             _context.SaveChanges();
@@ -73,7 +75,7 @@ namespace MovieApp.backend.Controllers
         public IActionResult AddCountry(Country requestCountry)
         {
             var existCountry = _context.Countries
-                .Single(r => r.Name == requestCountry.Name || r.Link == requestCountry.Link);
+                .SingleOrDefault(r => r.Name == requestCountry.Name || r.Link == requestCountry.Link);
             
             if (existCountry != null)
             {
