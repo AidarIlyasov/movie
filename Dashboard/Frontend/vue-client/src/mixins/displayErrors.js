@@ -3,6 +3,19 @@
   methods: {
     displayErrors(response) {
       // response.data
+      // if (response.status === 403) {
+      //   window.location.href = "/login";
+      // }
+      //
+      // if (response.status === 401) {
+      //   this.$notify({
+      //     title: "Access denied",
+      //     type: "error"
+      //   });
+      //  
+      //   return;
+      // }
+      
       if (response.data.errorMessage) {
         this.$notify({
           title: response.data.errorMessage,

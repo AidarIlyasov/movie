@@ -1,4 +1,4 @@
-﻿import {minLength, required, helpers, maxLength} from '@vuelidate/validators';
+﻿import {minLength, required, helpers, maxLength, email, numeric} from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core'
 
 export default {
@@ -6,7 +6,7 @@ export default {
   methods: {
     restrictionValidator() {
       return {
-        selectedRestriction: {
+        validateRestriction: {
           name: {
             required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
             minLength: minLength(2)
@@ -20,7 +20,7 @@ export default {
     },
     categoriesValidator() {
       return {
-        selectedCategory: {
+        validateCategory: {
           name: {
             required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
             minLength: minLength(2)
@@ -34,7 +34,7 @@ export default {
     },
     qualityValidator() {
       return {
-        selectedQuality: {
+        validateQuality: {
           name: {
             required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
             minLength: minLength(2),
@@ -45,7 +45,7 @@ export default {
     },
     countryValidator() {
       return {
-        selectedCountry: {
+        validateCountry: {
           name: {
             required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
             minLength: minLength(2),
@@ -55,6 +55,32 @@ export default {
             required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
             minLength: minLength(2),
             maxLength: maxLength(25)
+          },
+          code: {
+            required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
+            numeric
+          }
+        }
+      }
+    },
+    userValidator() {
+      return {
+        validateUser: {
+          login: {
+            required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
+            minLength: minLength(2),
+            maxLength: maxLength(25)
+          },
+          email: {
+            required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
+            minLength: minLength(5),
+            maxLength: maxLength(25),
+            email
+          },
+          password: {
+            required: helpers.withMessage(({$property}) => `the '${$property}' field cannot be empty`, required),
+            minLength: minLength(8),
+            maxLength: maxLength(100),
           }
         }
       }
@@ -62,7 +88,7 @@ export default {
     async validateFields(name) {
       const isFormCorrect = await this.v$.$validate()
       if (!isFormCorrect) {
-        this.v$[`selected${name}`].$errors.forEach(e => {
+        this.v$[`validate${name}`].$errors.forEach(e => {
           this.$notify({
             title: `${e.$property}: ${e.$message.toLowerCase()}`,
             type: "error"
