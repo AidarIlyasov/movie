@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Infrastructure.Data;
 using System.Linq;
-using Fall.Core.Extensions;
+using MovieApp.Application.Entities;
 using MovieApp.Application.DTO;
 
 namespace MovieApp.backend.Controllers
@@ -48,7 +48,7 @@ namespace MovieApp.backend.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateRestriction(RestrictionDto requestRestriction)
         {
-            var existRestriction = _context.Restrictions.Single(r => r.Id == requestRestriction.Id);
+            var existRestriction = _context.Restrictions.SingleOrDefault(r => r.Id == requestRestriction.Id);
             
             if (existRestriction == null)
             {
@@ -64,14 +64,14 @@ namespace MovieApp.backend.Controllers
             _context.Update(existRestriction);
             _context.SaveChanges();
 
-            return Ok(existRestriction);
+            return Ok(requestRestriction);
         }
 
         [HttpPost("")]
         public IActionResult AddRestriction(RestrictionDto requestRestriction)
         {
             var existRestriction = _context.Restrictions
-                .Single(r => r.Name == requestRestriction.Name || r.Link == requestRestriction.Link);
+                .SingleOrDefault(r => r.Name == requestRestriction.Name || r.Link == requestRestriction.Link);
             
             if (existRestriction != null)
             {
@@ -81,10 +81,16 @@ namespace MovieApp.backend.Controllers
                 });
             }
 
-            _context.Add(requestRestriction);
+            var restriction = new Restriction
+            {
+                Link = requestRestriction.Link,
+                Name = requestRestriction.Name
+            };
+            
+            _context.Add(restriction);
             _context.SaveChanges();
 
-            return Ok(requestRestriction);
+            return Ok(restriction);
         }
     }
 }

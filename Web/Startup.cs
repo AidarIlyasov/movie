@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using MovieApp.Infrastructure.Data.Repositories;
 using MovieApp.Infrastructure.Data;
 using MovieApp.Application.Interfaces;
-using Microsoft.AspNetCore.SpaServices;
+using MovieApp.Infrastructure.Services;
 
 namespace MovieApp.Web
 {
@@ -20,7 +20,7 @@ namespace MovieApp.Web
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,10 +33,13 @@ namespace MovieApp.Web
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IMovieRepository, MovieRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IMovieFiltersService, MovieFiltersService>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
+                    options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.Cookie.Name = "AuthCookie";
                     options.LoginPath = new PathString("/Login");
                     options.AccessDeniedPath = new PathString("/Login");
                 });

@@ -23,7 +23,11 @@
   import MovieItem from '../../components/Movie/MovieItem.vue'
   import Preloader from '../../components/Preloader.vue'
   import axios from 'axios'
-  
+
+  const header = {
+    headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+  }
+
   export default {
     name: "MoviesView",
     data() {
@@ -34,19 +38,19 @@
     },
     methods: {
       getSeasonMovies() {
-        axios.get('/dashboard/movies/season/')
+        axios.get('/dashboard/movies/season/', header)
             .then(r => this.movies = r.data)
             .catch(e => console.error(e))
             .finally(() => this.preloader = false)
       },
       getFilteredMovies() {
-          axios.get(`/dashboard/movies/filters?${this.$route.params.filter}`)
+          axios.get(`/dashboard/movies/filters?${this.$route.params.filter}`, header)
             .then(r => this.movies = r.data.movies)
             .catch(e => console.error(e))
             .finally(() => this.preloader = false)
       },
       removeItem(movieId, index) {
-        axios.delete(`/dashboard/movies/${movieId}/categories/${this.$route.params.id}`)
+        axios.delete(`/dashboard/movies/${movieId}/categories/${this.$route.params.id}`, header)
             .then(r => this.movies[movieIndex].categories = r.data)
             .then(() => this.$notify({
               title: `Category was successfully removed`,

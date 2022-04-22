@@ -5,9 +5,9 @@
         listName="category"
         :selectedItem="selectedCategory"
         :operation="operation"
-        :editableFields="editableFields"
-        @update="updateCategory()"
-        @add="insertCategory()"
+        :tableFields="tableFields"
+        @update="updateCategory($event)"
+        @add="insertCategory($event)"
     > <tr v-for="(category, index) in categories" :key="category.id">
       <th scope="row">{{index + 1}}</th>
       <td>{{category.name}}</td>
@@ -47,6 +47,10 @@ import displayErrors from "../../mixins/displayErrors.js";
 import validator from "../../mixins/validator.js";
 import useVuelidate from "@vuelidate/core";
 
+const header = {
+  headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+}
+
 export default {
   name: "CategoriesView",
   mixins: [displayErrors, validator],
@@ -54,11 +58,15 @@ export default {
   data() {
     return {
       categories: [],
-      editableFields:["name", "link"],
+      tableFields:[
+        {name: "name", editable: true, type: "text"},
+        {name: "link", editable: true, type: "text"}
+      ],
       preloader: true,
       selectedIndex: 0,
       operation: 'Update',
-      selectedCategory: {}
+      selectedCategory: {},
+      validateCategory: {}
     }
   },
   validations () {
@@ -71,10 +79,11 @@ export default {
       this.selectedCategory = this.categories[index];
       this.emitter.emit('categorySettingsModal', true);
     },
-    async updateCategory() {
+    async updateCategory(updatedData) {
+      this.validateCategory = updatedData;
       if (!await this.validateFields("Category")) return;
 
-      axios.put(`/dashboard/categories/${this.selectedCategory.id}/`, this.selectedCategory)
+      axios.put(`/dashboard/categories/${this.selectedCategory.id}/`, updatedData, header)
           .then(r => this.categories[this.selectedIndex] = r.data)
           .then(() => this.$notify({
             title: `Category ${this.selectedCategory.name} was updated`,
@@ -87,10 +96,11 @@ export default {
       this.operation = 'Add';
       this.emitter.emit('categorySettingsModal', true);
     },
-    async insertCategory() {
+    async insertCategory(updatedData) {
+      this.validateCategory = updatedData;
       if (!await this.validateFields("Category")) return;
       
-      axios.post(`/dashboard/categories/`, this.selectedCategory)
+      axios.post(`/dashboard/categories/`, updatedData, header)
           .then(r => this.categories.push(r.data))
           .then(() => this.$notify({
             title: "Category was successfully added",
@@ -104,7 +114,7 @@ export default {
     CustomList
   },
   created() {
-    axios.get('/dashboard/categories/')
+    axios.get('/dashboard/categories/', header)
       .then(r => this.categories = r.data)
       .catch(e => console.error(e))
       .finally(() => this.preloader = false);

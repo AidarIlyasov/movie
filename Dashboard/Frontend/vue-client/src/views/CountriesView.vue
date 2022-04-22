@@ -5,9 +5,9 @@
         listName="country"
         :selectedItem="selectedCountry"
         :operation="operation"
-        :editableFields="editableFields"
-        @update="updateCountry()"
-        @add="insertCountry()"
+        :tableFields="tableFields"
+        @update="updateCountry($event)"
+        @add="insertCountry($event)"
     >
       <tr v-for="(country, index) in countries" :key="country.id">
         <th scope="row">{{index + 1}}</th>
@@ -55,6 +55,10 @@ const selectedCountry = {
     code: ""
 };
 
+const header = {
+  headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+}
+
 export default {
   name: "CountriesView.vue",
   mixins: [validator, displayErrors],
@@ -62,8 +66,14 @@ export default {
   data() {
     return {
       countries: [],
-      editableFields:["name", "link", "code"],
+      tableFields:[
+        {name: "name", type: "text", editable: true},
+        {name: "link", editable: true, type: "text"},
+        {name: "code", editable: true, type: "text"},
+        {name: "movie count", editable: false}  
+      ],
       selectedCountry: selectedCountry,
+      validateCountry: {},
       selectedIndex: 0,
       preloader: true,
       operation: 'Update'
@@ -76,13 +86,14 @@ export default {
     editCountry(index) {
       this.operation = 'Update';
       this.selectedIndex = index;
-      this.selectedCountry = this.countries[index];
+      this.selectedCountry = JSON.parse(JSON.stringify(this.countries[index]));
       this.emitter.emit('countrySettingsModal', true);
     },
-    async updateCountry() {
+    async updateCountry(updatedData) {
+      this.validateCountry = updatedData;
       if (!await this.validateFields("Country")) return;
 
-      axios.put(`/dashboard/countries/${this.selectedCountry.id}/`, this.selectedCountry)
+      axios.put(`/dashboard/countries/${this.selectedCountry.id}/`, updatedData, header)
           .then(r => this.countries[this.selectedIndex] = r.data)
           .then(() => this.$notify({
             title: `Country ${this.selectedCountry.name} was updated`,
@@ -95,10 +106,11 @@ export default {
       this.operation = 'Add';
       this.emitter.emit('countrySettingsModal', true);
     },
-    async insertCountry() {
+    async insertCountry(addedData) {
+      this.validateCountry = addedData;
       if (!await this.validateFields("Country")) return;
 
-      axios.post(`/dashboard/countries/`, this.selectedCountry)
+      axios.post(`/dashboard/countries/`, addedData, header)
           .then(r => this.countries.push(r.data))
           .then(() => this.$notify({
             title: "Country was successfully added",
@@ -108,10 +120,13 @@ export default {
     }
   },
   created() {
-    axios.get('/dashboard/countries/')
-        .then(r => this.countries = r.data)
-        .catch(e => console.error(e))
-        .finally(() => this.preloader = false);
+    axios.get('/dashboard/countries/', header)
+      .then(r => this.countries = r.data)
+      .catch(e => this.displayErrors(e.response))
+      .finally(() => this.preloader = false);
+
+    axios.get('/dashboard/home/name', header)
+    .then(r => console.log(r.data))
   },
   components: {
     CustomList,

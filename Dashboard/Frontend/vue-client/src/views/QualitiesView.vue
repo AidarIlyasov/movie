@@ -5,9 +5,9 @@
         listName="quality"
         :selectedItem="selectedQuality"
         :operation="operation"
-        :editableFields="editableFields"
-        @update="updateQuality()"
-        @add="insertQuality()"
+        :tableFields="tableFields"
+        @update="updateQuality($event)"
+        @add="insertQuality($event)"
     >
       <tr v-for="(quality, index) in qualities" :key="quality.id">
         <th scope="row">{{index + 1}}</th>
@@ -47,6 +47,10 @@ import CustomList from "../components/CustomList.vue";
 import Preloader from "../components/Preloader.vue";
 import useVuelidate from "@vuelidate/core";
 
+const header = {
+  headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+}
+
 export default {
   name: "QualitiesView.vue",
   mixins: [validator, displayErrors],
@@ -55,7 +59,11 @@ export default {
     return {
       qualities: [],
       selectedQuality: {},
-      editableFields:["name"],
+      validateQuality: {},
+      tableFields:[
+        {name: "name", editable: true, type: "text"},
+        {name: "movies count", editable: false},
+      ],
       selectedIndex: 0,
       preloader: true,
       operation: 'Update'
@@ -68,13 +76,14 @@ export default {
     editQuality(index) {
       this.operation = 'Update';
       this.selectedIndex = index;
-      this.selectedQuality = this.qualities[index];
+      this.selectedQuality = JSON.parse(JSON.stringify(this.qualities[index]));
       this.emitter.emit('qualitySettingsModal', true);
     },
-    async updateQuality() {
+    async updateQuality(updatedData) {
+      this.validateQuality = updatedData;
       if (!await this.validateFields("Quality")) return;
 
-      axios.put(`/dashboard/qualities/${this.selectedQuality.id}/`, this.selectedQuality)
+      axios.put(`/dashboard/qualities/${this.selectedQuality.id}/`, updatedData, header)
           .then(r => this.qualities[this.selectedIndex] = r.data)
           .then(() => this.$notify({
             title: `Quality ${this.selectedQuality.name} was updated`,
@@ -87,10 +96,11 @@ export default {
       this.operation = 'Add';
       this.emitter.emit('qualitySettingsModal', true);
     },
-    async insertQuality() {
+    async insertQuality(addedData) {
+      this.validateQuality = addedData;
       if (!await this.validateFields("Quality")) return;
 
-      axios.post(`/dashboard/qualities/`, this.selectedQuality)
+      axios.post(`/dashboard/qualities/`, addedData, header)
           .then(r => this.qualities.push(r.data))
           .then(() => this.$notify({
             title: "Quality was successfully added",
@@ -100,7 +110,7 @@ export default {
     }
   },
   created() {
-    axios.get('/dashboard/qualities/')
+    axios.get('/dashboard/qualities/', header)
         .then(r => this.qualities = r.data)
         .catch(e => console.error(e))
         .finally(() => this.preloader = false);

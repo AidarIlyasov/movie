@@ -45,7 +45,7 @@ namespace MovieApp.backend.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateQuality(QualityDto requestQuality)
         {
-            var existQuality = _context.Qualities.Single(r => r.Id == requestQuality.Id);
+            var existQuality = _context.Qualities.SingleOrDefault(r => r.Id == requestQuality.Id);
             
             if (existQuality == null)
             {
@@ -67,7 +67,7 @@ namespace MovieApp.backend.Controllers
         public IActionResult AddQuality(QualityDto requestQuality)
         {
             var existQuality = _context.Qualities
-                .Single(r => r.Name.ToLower() == requestQuality.Name.ToLower());
+                .SingleOrDefault(r => r.Name.ToLower() == requestQuality.Name.ToLower());
             
             if (existQuality != null)
             {
@@ -77,10 +77,14 @@ namespace MovieApp.backend.Controllers
                 });
             }
 
-            _context.Add(requestQuality);
+            var quality = new Quality
+            {
+                Name = requestQuality.Name
+            };
+            _context.Add(quality);
             _context.SaveChanges();
 
-            return Ok(requestQuality);
+            return Ok(quality);
         }
     }
 }
