@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\AdminPanelAggregate" />
     <Folder Include="Entities\MovieAggregate" />
   </ItemGroup>
 
