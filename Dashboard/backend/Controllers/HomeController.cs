@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MovieApp.Application.Interfaces;
 
 namespace MovieApp.backend.Controllers
 {
-    public class HomeController: Controller
+    [ApiController]
+    [Route("/dashboard/[controller]/")]
+    public class HomeController: ControllerBase
     {
         IFileManager _fileManager;
         public HomeController(IFileManager fileManager)
@@ -11,17 +14,11 @@ namespace MovieApp.backend.Controllers
             _fileManager = fileManager;
         }
 
-        [HttpGet("dashboard/[controller]")]
-        public ActionResult Index()
+        [Authorize(Roles = "admin")]
+        [HttpGet("name")]
+        public IActionResult GetLogin()
         {
-            return Content("Hello world from dashboard!");
-        }
-
-
-        [HttpGet("dashboard/pages")]
-        public IActionResult Pages()
-        {
-            return Ok("Hello world from dashboard Api");
+            return Ok($"Your login: {User.Identity?.Name}");
         }
 
         //todo remove this

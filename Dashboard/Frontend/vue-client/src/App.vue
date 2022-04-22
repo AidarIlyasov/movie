@@ -1,6 +1,7 @@
 <template>
-  <notifications width="370"></notifications>
   <div>
+    <notifications width="370"></notifications>
+    <div v-show="userExisted">
       <Navbar></Navbar>
       <div class="wrapper">
         <div class="container">
@@ -13,6 +14,11 @@
         </div>
       </div>
     </div>
+    <div v-show="!userExisted">
+      <RouterView name="LoginView"></RouterView>
+      <RouterView name="PageNotFound"></RouterView>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -30,6 +36,15 @@
       components: {
         Aside,
         Navbar
+      },
+      created() {
+        if (!this.userExisted) 
+          this.$router.push('/login');
+      },
+      computed: {
+        userExisted() {
+          return !!localStorage.getItem('user');
+        }
       }
     }
 </script>

@@ -12,9 +12,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="vue-client\src\images" />
+    <Folder Include="vue-client\src\services" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="vue-client\src\mixins\displayErrors.js" />
+    <Content Include="vue-client\src\store\auth.js" />
+    <Content Include="vue-client\src\store\index.js" />
   </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

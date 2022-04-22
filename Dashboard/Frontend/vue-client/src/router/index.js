@@ -11,6 +11,8 @@ import CountriesView from "../views/CountriesView.vue";
 
 import SeasonMovies from '../views/Home/SeasonMovies.vue'
 import QualitiesView from "../views/QualitiesView.vue";
+import LoginView from "../views/Auth/LoginView.vue";
+import PageNotFound from "../views/PageNotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +76,14 @@ const router = createRouter({
       path: '/pricing',
       name: 'pricing',
       component: PricingPlanView
+    },
+    {
+      path: '/login',
+      components: { LoginView }
+    },
+    {
+      path: '/:catchAll(.*)*',
+      components: { PageNotFound },
     },
   ]
 })
