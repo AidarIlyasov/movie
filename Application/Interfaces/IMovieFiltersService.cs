@@ -1,6 +1,7 @@
-﻿using MovieApp.Application.DTO;
+﻿using MovieApp.Core.DTO;
+using MovieApp.Core.DTO.MovieAggregate.Filters;
 
-namespace MovieApp.Application.Interfaces
+namespace MovieApp.Core.Interfaces
 {
     public interface IMovieFiltersService
     {

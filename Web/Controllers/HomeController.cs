@@ -26,19 +26,10 @@ namespace MovieApp.Web.Controllers
         [HttpGet("/")]
         public IActionResult Index(string? search = null)
         {
-            if (string.IsNullOrEmpty(search)) return View();
+            if (string.IsNullOrEmpty(search)) 
+                return View(GetHomePageResult());
 
-            var movies = _movieRepository
-                .GetMoviesBySearch(search.ToLower());
-
-            var model = new SearchResultViewModel
-            {
-                FilterOptions = _movieFiltersService.GetFilters(),
-                Movies = movies,
-                BreadcrumbTitle = "Search Results",
-            };
-
-            return View("~/Views/Category/SearchResult.cshtml", model);
+            return View("~/Views/Category/SearchResult.cshtml", GetSearchResult(search));
         }
 
         [HttpGet("Privacy")]
@@ -63,6 +54,31 @@ namespace MovieApp.Web.Controllers
         public IActionResult About()
         {
             return View();
+        }
+
+        private HomePageViewModel GetHomePageResult()
+        {
+            return new HomePageViewModel
+            {
+                SeasonMovies = _movieRepository.GetSeasonMovies(),
+                NewMovies = _movieRepository.GetNewMovies(),
+                ExpectedPremiereMovies = _movieRepository.GetExpectedPremiereMovies()
+            };
+        }
+
+        private MoviesViewModel GetSearchResult(string search)
+        {
+            var movies = _movieRepository
+                .GetMoviesBySearch(search.ToLower());
+            
+            return new MoviesViewModel
+            {
+                BreadcrumbTitle = "Search Results",
+                // Link = name,
+                Movies = movies,
+                FilterOptions = _movieFiltersService.GetFilters()
+            };
+            
         }
 
         // [HttpGet("/Image/{image}")]

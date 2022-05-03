@@ -22,6 +22,7 @@ namespace MovieApp.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<HomePageSettings> HomePageSettings { get; set; }
+        public DbSet<HomePagePosition> HomePagePositions { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -46,12 +47,12 @@ namespace MovieApp.Infrastructure.Data
             var userRole = new Role { Id = 2, Name = userRoleName };
             var adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id, Login = adminLogin };
 
-            var restriction1 = new Restriction { Id = 1, Name = "21+", Link = "2"};
-            var restriction2 = new Restriction { Id = 2, Name = "18+" , Link = "18"};
-            var restriction3 = new Restriction { Id = 3, Name = "16+" , Link = "16"};
-            var restriction4 = new Restriction { Id = 4, Name = "14+" , Link = "14"};
-            var restriction5 = new Restriction { Id = 5, Name = "12+" , Link = "12"};
-            var restriction6 = new Restriction { Id = 6, Name = "6+" , Link = "6"};
+            var restriction1 = new Restriction { Id = 1, Name = "21+", Link = 2};
+            var restriction2 = new Restriction { Id = 2, Name = "18+" , Link = 18};
+            var restriction3 = new Restriction { Id = 3, Name = "16+" , Link = 16};
+            var restriction4 = new Restriction { Id = 4, Name = "14+" , Link = 14};
+            var restriction5 = new Restriction { Id = 5, Name = "12+" , Link = 12};
+            var restriction6 = new Restriction { Id = 6, Name = "6+" , Link = 6};
 
             var country1 = new Country {Id = 1, Name = "USA", Link = "usa" };
             var country2 = new Country {Id = 2, Name = "France", Link = "france" };
@@ -94,8 +95,6 @@ namespace MovieApp.Infrastructure.Data
             modelBuilder.Entity<Movie>().HasData(new Movie[] { movie1, movie2, movie3, movie4, movie5 });
             modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
             modelBuilder.Entity<User>().HasData(new User[] { adminUser });
-            modelBuilder.Entity<Photo>()
-                .HasIndex(p => new { p.MovieId, p.IsPoster }).IsUnique();
 
             modelBuilder.Entity<Movie>()
                 .HasMany(p => p.Categories)
@@ -106,18 +105,24 @@ namespace MovieApp.Infrastructure.Data
                         new { MoviesId = movie1.Id, CategoriesId = category2.Id },
                     }
                 ));
-
-
+            
+            
+            modelBuilder.Entity<HomePagePosition>()
+                .HasData(new[] {
+                    new HomePagePosition { Name = "season", Id = 1},
+                    new HomePagePosition { Name = "new", Id = 2},
+                    new HomePagePosition { Name = "expected", Id = 3},
+                });
 
             modelBuilder.Entity<HomePageSettings>()
-                .HasKey(p => new { p.MovieId, p.Position });
+                .HasKey(p => new { p.MovieId, p.PositionId });
 
              modelBuilder.Entity<HomePageSettings>()    
                 .HasData(new HomePageSettings[] {
-                    new HomePageSettings { MovieId = movie1.Id, Position = "season"},
-                    new HomePageSettings { MovieId = movie2.Id, Position = "season"},
-                    new HomePageSettings { MovieId = movie3.Id, Position = "season"},
-                    new HomePageSettings { MovieId = movie4.Id, Position = "season"},
+                    new HomePageSettings { MovieId = movie1.Id, PositionId = 1},
+                    new HomePageSettings { MovieId = movie2.Id, PositionId = 1},
+                    new HomePageSettings { MovieId = movie3.Id, PositionId = 1},
+                    new HomePageSettings { MovieId = movie4.Id, PositionId = 1},
                 });
 
             base.OnModelCreating(modelBuilder);

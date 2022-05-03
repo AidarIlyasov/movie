@@ -103,7 +103,7 @@
       <span>Movie photos</span>
       <hr>
       <div class="movie-photos d-flex flex-wrap">
-        <div class="movie-phtos_item" v-for="(photo, index) in movie.photos" :key="photo.id">
+        <div class="movie-photos_item" v-for="(photo, index) in movie.photos" :key="photo.id">
           <div class="photo-item_pic">
             <button 
               class="btn btn-sm btn-danger movie-photo_remove" 
@@ -112,14 +112,16 @@
             >
               <i class="fa fa-close"></i>
             </button>
-            <img :src="'/image/' + photo.name">
+            <img :src="photo.name ? '/image/' + movie.id + '/' + photo.name + '.jpg' : photo.localImage">
           </div>
           <div class="form-group form-radio">
-            <input type="radio" class="form-check-input photo-item_status-input" @change="setAsPoster($event)" :value="index" :id="'photo-' + photo.id" name="moviePoser">
-            <label class="photo-item_status form-check-label" :for="'photo-' + photo.id"><span class="btn btn-tiny">set as a poster</span> <b>{{photo.isPoster}}</b></label>
+            <input type="radio" class="form-check-input photo-item_status-input" @change="setAsPoster(index)" :id="'photo-' + index" name="moviePoser">
+            <label class="photo-item_status form-check-label" :for="'photo-' + index">
+              <span :class="photo.isPoster ? 'btn-secondary btn-tiny' : 'btn btn-tiny'">set as a poster</span>
+            </label>
           </div>  
         </div>
-        <label for="add-photo" class="movie-phtos_item movie-photo_add">
+        <label for="add-photo" class="movie-photos_item movie-photo_add">
           <div class="text-center">
             <span class="movie-photo_add-btn"><i class="fa fa-folder-o"></i>Add image</span>
             <input id="add-photo" type="file" accept="image/jpeg, image/jpg, image/png" @change="onUploadFile">
@@ -138,6 +140,10 @@
 import axios from 'axios'
 import CustomModal from '../../components/CustomModal.vue'
 import Preloader from '../../components/Preloader.vue'
+
+const header = {
+  headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+}
 
 export default {
   name: "MovieEditView.vue",
@@ -206,7 +212,6 @@ export default {
 
       let image = event.target.files[0];
       let reader = new FileReader();
-      reader.onload = e => this.movie.lastUploadImage = e.target.result;
 
       if (this.availablePhotoTypes.filter(type => type === image.type).length < 1) {
         alert('acceptable image types ' + this.availablePhotoTypes.join(', '));
@@ -220,17 +225,17 @@ export default {
 
       reader.readAsDataURL(image);
 
-      this.movie.photos.push({
-        id: 2,
+      reader.onload = e => this.movie.photos.push({
+        localImage: e.target.result,
         image: image,
-        isPoster: false  
-      })
-      this.movie.raiting = '9,6';
+        isPoster: false
+      });
+
+      this.movie.raiting = '9,6'; //todo fix this
     },
-    setAsPoster(event) {
-      let index = event.target.value;
+    setAsPoster(index) {
       this.movie.photos.forEach(p => p.isPoster = false);
-      this.movie.photos[index].isPoster = true;
+      this.movie.photos[index]["isPoster"] = true;
     },
     removePhoto(index) {
       this.movie.photos.splice(index, 1);
@@ -243,6 +248,8 @@ export default {
         if (Array.isArray(this.movie[key])) {
           this.movie[key].forEach((obj, index) => {
             for(let innerKey in obj) {
+              if (innerKey === 'localImage') continue;
+              console.log(`${key}[${index}].${innerKey} => ${obj[innerKey]}`);
               formData.append(`${key}[${index}].${innerKey}`, obj[innerKey]);
             }
           })
@@ -260,13 +267,17 @@ export default {
 
         formData.append(key, this.movie[key]);
       }
-
+      
       axios.put(`/dashboard/movies/${this.$route.params.id}`, formData, {
         headers: {
-          'content-type': `multipart/form-data; boundary=${formData._boundary}`
+          'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+          "Authorization": "Bearer " + localStorage.getItem('user')
           }
         })
-        .then(r => console.log(r))
+        .then(r => this.$notify({
+          title: `Movie ${r.data} was successfully updated`,
+          type: "success"
+        }))
         .catch(e => console.error(e));
     },
     async getCountries() {
@@ -274,7 +285,7 @@ export default {
 
 
       // slit to mixin
-      await axios.get(`/dashboard/countries/`)
+      await axios.get(`/dashboard/countries/`, header)
         .then(r => r.data)
         .then(countries => countries.map(c => {
           if (this.movie.countries.find(mv => mv.id === c.id) !== undefined) {
@@ -288,7 +299,7 @@ export default {
     async getCategories() {
       if (this.availableCategories.length > 0) return;
 
-      await axios.get(`/dashboard/categories/`)
+      await axios.get(`/dashboard/categories/`, header)
         .then(r => r.data)
         .then(catList => catList.map(c => {
           if (this.movie.categories.find(g => g.id === c.id) !== undefined) {
@@ -304,18 +315,18 @@ export default {
 
   },
   async created() {
-    axios.get(`/dashboard/qualities`)
-      .then(r => this.qualities = r.data)
-      .catch(e => console.error(e));
-
-    axios.get(`/dashboard/restrictions/`)
-      .then(r => this.restrictions = r.data)
-      .catch(e => console.error(e));
-
-    let movie = await axios.get(`/dashboard/movies/${this.$route.params.id}/edit`)
-      .then(r => this.movie = r.data)
-      .catch(e => console.error(e))
-      .finally(() => this.preloader = false)
+    let qualities = await axios.get(`/dashboard/qualities/`, header)
+    let restrictions = await axios.get(`/dashboard/restrictions/`, header)
+    let movie = await axios.get(`/dashboard/movies/${this.$route.params.id}/edit`, header)
+    
+    Promise.all([qualities, restrictions, movie])
+      .then(values => {
+        this.qualities = values[0].data;
+        this.restrictions = values[1].data;
+        this.movie = values[2].data
+      })
+        .catch(e => console.error(e))
+        .finally(() => this.preloader = false)
 
 
     // modal status listeners
@@ -375,10 +386,10 @@ export default {
     margin-bottom: 5px;
   }
 
-  .movie-phtos_item {
+  .movie-photos_item {
     width: 150px;
   }
-  .movie-phtos_item:not(:nth-child(5n)) {
+  .movie-photos_item:not(:nth-child(5n)) {
     margin-right: calc((100% - 150px * 5) / 4);
   }
   .photo-item_pic {

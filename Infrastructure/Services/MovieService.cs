@@ -9,9 +9,11 @@ using MovieApp.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using Fall.Core.Conllections.Extensions;
 
 namespace MovieApp.Infrastructure.Services
 {
@@ -21,6 +23,8 @@ namespace MovieApp.Infrastructure.Services
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
         private readonly IFileManager _fileManager;
+        
+        private IEnumerable<int> availableImageIds = ImmutableArray<int>.Empty;
         public MovieService(
             ApplicationContext context,
             IMovieRepository movieRepository,
@@ -81,8 +85,7 @@ namespace MovieApp.Infrastructure.Services
                                 .Where(qm => request.Qualities.Any(q => q.Id == qm.Id))
                                 .ToList();
 
-            // movie.Photos =
-            //var photos = await CreatePhotos(request.Photos);
+            movie.Photos = await CreatePhotos(request.Id, request.Photos);
 
             _context.Entry(movie).State = EntityState.Modified;
 
@@ -108,20 +111,27 @@ namespace MovieApp.Infrastructure.Services
             }).ToList();
         }
 
-        private async Task<List<Photo>> CreatePhotos(List<PhotoDto> photos)
+        private async Task<List<Photo>> CreatePhotos(int movieId, List<PhotoDto> photos)
         {
             var createdPhotos = new List<Photo>();
-                
             foreach (var photo in photos)
             {
                 if (photo.Image != null)
                 {
-                    var createdImage = await _fileManager.SaveImage(photo.Image, photo.Id.ToString());
+                    var createdImage = await _fileManager.SaveImage(photo.Image, movieId.ToString(), GetImageName(photos));
+                    createdPhotos.Add(new Photo
+                    {
+                        Name = createdImage,
+                        IsPoster = photo.IsPoster
+                    });
+                }
+                else
+                {
                     createdPhotos.Add(new Photo
                     {
                         Id = photo.Id,
-                        Name = createdImage.Name,
-                        IsPoster = photo.IsPoster
+                        IsPoster = photo.IsPoster,
+                        Name = photo.Name
                     });
                 }
             }
@@ -129,20 +139,35 @@ namespace MovieApp.Infrastructure.Services
             return createdPhotos;
         }
 
-        private static MovieDto GetMovie(Movie movie)
+        private int GetImageName(List<PhotoDto> photos)
+        {
+            if (!availableImageIds.Any())
+            {
+                int[] ids = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+                availableImageIds = ids.Except<int>(photos.Where(p => p.Image == null).Select(p => p.Name)).ToArray();
+            }
+
+            int id = availableImageIds.First();
+            availableImageIds = availableImageIds.Where(e => e != id);
+            
+            return id;
+        }
+
+        private MovieDto GetMovie(Movie movie)
         {
             return new MovieDto {
                 Id = movie.Id,
                 Title = movie.Title,
                 Description = movie.Description,
+                Poster = movie.Photos?.SingleOrDefault(p => p.IsPoster)?.Name.ToString() ??  "default",
                 Qualities = movie.Qualities.Select(q => new Quality {
                     Id = q.Id,
                     Name = q.Name
                 }).ToList(),
                 Categories = movie.Categories.Select(category => CategoryDto.FromCategory(category)).ToList(),
-                Photos = movie.Photos.Select(photo => PhotoDto.FromPhoto(photo)).ToList(),
-                // Comments = movie.Comments.Select(comment => _mapper.Map<CommentDto>(comment)),
-                // Reviews = movie.Reviews.Select(review => _mapper.Map<ReviewDto>(review)),
+                Photos = movie.Photos?.Select(PhotoDto.FromPhoto).ToList(),
+                Comments = movie.Comments.Select(comment => _mapper.Map<CommentDto>(comment)),
+                Reviews = movie.Reviews.Select(review => _mapper.Map<ReviewDto>(review)),
                 Countries = movie.Countries.Select(c => new Country {
                     Id = c.Id,
                     Name = c.Name,

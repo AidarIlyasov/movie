@@ -31,10 +31,33 @@ namespace MovieApp.Infrastructure.Services
             _query = movieRepository.GetMovies();
         }
 
+        public GetMoviesService SetYears(int minYear, int maxYear)
+        {
+            if (minYear != 0)
+                _query = _query.Where(m => m.Release.Year >= minYear);
+
+            if (maxYear != 0)
+                _query = _query.Where(m => m.Release.Year <= maxYear);
+
+            return this;
+        }
+
         public GetMoviesService SetCategory(int categoryId)
         {
             if (categoryId != 0)
                 _query = _query.Where(m => m.Categories.Any(g => g.Id == categoryId));
+
+            return this;
+        }
+
+        //todo link should be int
+        public GetMoviesService SetRestriction(int restrictionMinLink, int restrictionMaxLink)
+        {
+            if (restrictionMinLink != 0)
+                _query = _query.Where(m => m.Restriction.Link >= restrictionMinLink);
+            
+            if (restrictionMaxLink != 0)
+                _query = _query.Where(m => m.Restriction.Link >= restrictionMaxLink);
 
             return this;
         }

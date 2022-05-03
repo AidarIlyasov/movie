@@ -54,11 +54,6 @@ namespace MovieApp.backend
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    // options.Cookie.SameSite = SameSiteMode.Strict;
-                    // options.Cookie.Name = "AuthCookie";
-                    // options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
-                    // // options.LoginPath = new PathString("/Login");
-                    // options.Events.OnRedirectToLogin = ForbiddenResponse;
                     options.RequireHttpsMetadata = false; // just for test
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

@@ -34,6 +34,7 @@ namespace MovieApp.backend.Controllers
         [HttpGet("{id:int}/movies")]
         public IActionResult GetCategoryMovies(int id)
         {
+            //todo check this method in frontend page
             var movies = _movieRepository.GetMoviesByCategory(id);
             return Ok(movies);
         }

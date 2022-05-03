@@ -15,6 +15,7 @@ namespace MovieApp.Application.DTO
         public string Slug { get; set; }
         public String Release { get; set; }
         public Restriction Restriction { get; set; }
+        public string Poster { get; set; } = "default";
 
         public List<Country> Countries { get; set; }
         public List<Quality> Qualities { get; set; }

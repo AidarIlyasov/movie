@@ -61,7 +61,7 @@ namespace MovieApp.Infrastructure.Migrations
                     b.ToTable("CountryMovie");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Category", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +157,7 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Comment", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,7 +186,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -200,7 +201,7 @@ namespace MovieApp.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Country", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,15 +236,48 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.HomePageSettings", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.HomePagePosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomePagePositions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "season"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "new"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "expected"
+                        });
+                });
+
+            modelBuilder.Entity("MovieApp.Core.Entities.HomePageSettings", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Position")
-                        .HasColumnType("text");
+                    b.Property<int>("PositionId")
+                        .HasMaxLength(50)
+                        .HasColumnType("integer");
 
-                    b.HasKey("MovieId", "Position");
+                    b.HasKey("MovieId", "PositionId");
 
                     b.ToTable("HomePageSettings");
 
@@ -251,26 +285,26 @@ namespace MovieApp.Infrastructure.Migrations
                         new
                         {
                             MovieId = 2,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 3,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 4,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 5,
-                            Position = "season"
+                            PositionId = 1
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.MovieAggregate.Movie", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.MovieAggregate.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,7 +404,7 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Photo", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -386,18 +420,17 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                    b.Property<int>("Name")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId", "IsPoster")
-                        .IsUnique();
+                    b.HasIndex("MovieId");
 
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Quality", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Quality", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -405,7 +438,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -429,7 +463,7 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Restriction", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Restriction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -485,7 +519,7 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Review", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -511,7 +545,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -525,7 +560,7 @@ namespace MovieApp.Infrastructure.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Role", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -533,7 +568,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -552,7 +588,7 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.User", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -563,13 +599,19 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Login")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("RoleId")
                         .HasColumnType("integer");
@@ -609,13 +651,13 @@ namespace MovieApp.Infrastructure.Migrations
 
             modelBuilder.Entity("CategoryMovie", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.Category", null)
+                    b.HasOne("MovieApp.Core.Entities.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", null)
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", null)
                         .WithMany()
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -624,28 +666,28 @@ namespace MovieApp.Infrastructure.Migrations
 
             modelBuilder.Entity("CountryMovie", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.Country", null)
+                    b.HasOne("MovieApp.Core.Entities.Country", null)
                         .WithMany()
                         .HasForeignKey("CountriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", null)
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", null)
                         .WithMany()
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Comment", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Comment", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", "Movie")
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", "Movie")
                         .WithMany("Comments")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieApp.Application.Entities.User", "User")
+                    b.HasOne("MovieApp.Core.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -654,9 +696,9 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.HomePageSettings", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.HomePageSettings", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", "Movie")
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", "Movie")
                         .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -665,9 +707,9 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.MovieAggregate.Movie", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.MovieAggregate.Movie", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.Restriction", "Restriction")
+                    b.HasOne("MovieApp.Core.Entities.Restriction", "Restriction")
                         .WithMany("Movies")
                         .HasForeignKey("RestrictionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -676,9 +718,9 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("Restriction");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Photo", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Photo", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", "Movie")
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", "Movie")
                         .WithMany("Photos")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -687,15 +729,15 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Review", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Review", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", "Movie")
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", "Movie")
                         .WithMany("Reviews")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieApp.Application.Entities.User", "User")
+                    b.HasOne("MovieApp.Core.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -704,9 +746,9 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.User", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.User", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.Role", "Role")
+                    b.HasOne("MovieApp.Core.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId");
 
@@ -715,20 +757,20 @@ namespace MovieApp.Infrastructure.Migrations
 
             modelBuilder.Entity("MovieQuality", b =>
                 {
-                    b.HasOne("MovieApp.Application.Entities.MovieAggregate.Movie", null)
+                    b.HasOne("MovieApp.Core.Entities.MovieAggregate.Movie", null)
                         .WithMany()
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieApp.Application.Entities.Quality", null)
+                    b.HasOne("MovieApp.Core.Entities.Quality", null)
                         .WithMany()
                         .HasForeignKey("QualitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.MovieAggregate.Movie", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.MovieAggregate.Movie", b =>
                 {
                     b.Navigation("Comments");
 
@@ -737,12 +779,12 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Restriction", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Restriction", b =>
                 {
                     b.Navigation("Movies");
                 });
 
-            modelBuilder.Entity("MovieApp.Application.Entities.Role", b =>
+            modelBuilder.Entity("MovieApp.Core.Entities.Role", b =>
                 {
                     b.Navigation("Users");
                 });

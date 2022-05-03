@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using MovieApp.Application.Interfaces;
+using MovieApp.Core.Interfaces;
 using System.IO;
 using System;
+using System.Security.Cryptography;
+using MovieApp.Core.Helpers;
 
 namespace MovieApp.Infrastructure.Data.Repositories
 {
@@ -27,30 +29,28 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return new FileStream(file, FileMode.Open, FileAccess.Read);
         }
 
-        public async Task<string> SaveImage(IFormFile image, string imagePath = "")
+        public async Task<int> SaveImage(IFormFile image, string folderName, int imageName)
         {
             try
             {
-                var savePath = Path.Combine(_imagePath, "images", imagePath);
+                var savePath = Path.Combine(_imagePath, "images", folderName);
                 if (!Directory.Exists(savePath))
                 {
                     Directory.CreateDirectory(savePath);
                 }
 
                 var mime = image.FileName.Substring(image.FileName.LastIndexOf('.'));
-                var fileName = $"img_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{mime}";
-
+                var fileName = $"{imageName}{mime}";
                 using (var fileStream = new FileStream(Path.Combine(savePath, fileName), FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);
                 }
 
-                return fileName;
+                return imageName;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                return "Error";
+                throw new Exception(e.Message);
             }
         }
     }

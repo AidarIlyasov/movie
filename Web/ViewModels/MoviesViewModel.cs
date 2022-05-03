@@ -2,6 +2,7 @@
 using MovieApp.Application.DTO;
 using System.Collections.Generic;
 using System.Linq;
+using MovieApp.Core.DTO.MovieAggregate.Filters;
 
 namespace MovieApp.Web.ViewModels
 {

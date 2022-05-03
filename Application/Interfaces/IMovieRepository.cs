@@ -10,7 +10,6 @@ namespace MovieApp.Application.Interfaces
 {
      public interface IMovieRepository
      {
-         
          Movie GetMovieBySlug(string slug);
 
          Movie GetMovieById(int id);
@@ -24,5 +23,7 @@ namespace MovieApp.Application.Interfaces
          List<ThinMovieDto> GetMoviesByCategory(int genreId);
 
          List<PosterMovie> GetSeasonMovies();
+         List<MovieDto> GetNewMovies();
+         List<ThinMovieDto> GetExpectedPremiereMovies();
      }
 }

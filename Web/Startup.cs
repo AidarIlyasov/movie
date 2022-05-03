@@ -31,6 +31,7 @@ namespace MovieApp.Web
             services.AddAutoMapper(typeof(Startup));
             
             services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<IMovieService, MovieService>();
             services.AddTransient<IMovieRepository, MovieRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IMovieFiltersService, MovieFiltersService>();

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Threading.Tasks;
+using MovieApp.Core.Helpers;
 
-namespace MovieApp.Application.Interfaces
+namespace MovieApp.Core.Interfaces
 {
     public interface IFileManager
     {
         FileStream ImageStream(string name);
 
-        Task<string> SaveImage(IFormFile image, string imagePath = "");
+        Task<int> SaveImage(IFormFile image, string folderName, int imageName);
     }
 }
