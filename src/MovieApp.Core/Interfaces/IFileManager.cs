@@ -9,6 +9,6 @@ namespace MovieApp.Core.Interfaces
     {
         FileStream ImageStream(string name);
 
-        Task<ReturnedImageData> SaveImage(IFormFile image, string imagePath = "");
+        Task<int> SaveImage(IFormFile image, string folderName, int imageName);
     }
 }

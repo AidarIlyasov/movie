@@ -6,7 +6,7 @@ namespace MovieApp.Core.DTO
     public class PhotoDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int Name { get; set; }
         public bool IsPoster { get; set; } = false;
         public IFormFile Image { get; set; }
 

@@ -1,4 +1,4 @@
-﻿@model MovieApp.Web.ViewModels.SearchResultViewModel
+﻿@model MovieApp.Web.ViewModels.MoviesViewModel
 
 @await Html.PartialAsync("~/Views/Partial/PageTitle.cshtml");
 @await Html.PartialAsync("~/Views/Partial/MoviesFilter.cshtml");
@@ -13,7 +13,7 @@
 			<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
 				<div class="card">
 					<div class="card__cover">
-						<img src="/image/@movie.Image">
+						<img src="/image/@movie.Id/@(movie.Image).jpg">
 						<a href="#" class="card__play">
 							<i class="icon ion-ios-play"></i>
 						</a>

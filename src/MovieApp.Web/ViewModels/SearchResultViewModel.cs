@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MovieApp.Core.DTO;
+using MovieApp.Core.DTO.MovieAggregate.Filters;
 
 namespace MovieApp.Web.ViewModels
 {

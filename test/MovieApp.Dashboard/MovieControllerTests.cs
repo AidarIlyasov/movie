@@ -66,7 +66,7 @@ namespace MovieApp.Dashboard.Tests
                   }
                 },
                 Categories = null,
-                Raiting = 9.4d
+                Rating = 9.4d
             };
         }
     }

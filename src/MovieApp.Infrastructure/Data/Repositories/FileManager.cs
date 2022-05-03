@@ -29,32 +29,24 @@ namespace MovieApp.Infrastructure.Data.Repositories
             return new FileStream(file, FileMode.Open, FileAccess.Read);
         }
 
-        public async Task<ReturnedImageData> SaveImage(IFormFile image, string imagePath = "")
+        public async Task<int> SaveImage(IFormFile image, string folderName, int imageName)
         {
             try
             {
-                var savePath = Path.Combine(_imagePath, "images", imagePath);
+                var savePath = Path.Combine(_imagePath, "images", folderName);
                 if (!Directory.Exists(savePath))
                 {
                     Directory.CreateDirectory(savePath);
                 }
 
                 var mime = image.FileName.Substring(image.FileName.LastIndexOf('.'));
-                var fileName = $"img_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{mime}";
-                var hashProvider = new MD5CryptoServiceProvider();
-                byte[] imageHash;
-                
+                var fileName = $"{imageName}{mime}";
                 using (var fileStream = new FileStream(Path.Combine(savePath, fileName), FileMode.Create))
                 {
                     await image.CopyToAsync(fileStream);
-                    imageHash = await hashProvider.ComputeHashAsync(fileStream);
                 }
 
-                return new ReturnedImageData
-                {
-                    Name = fileName,
-                    Hash = imageHash
-                };
+                return imageName;
             }
             catch (Exception e)
             {

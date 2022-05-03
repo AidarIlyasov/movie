@@ -21,7 +21,7 @@ namespace MovieApp.Core.DTO
             Id = id;
             Title = title;
             Link = link;
-            Image = photos.Any() ? photos.Single(p => p.IsPoster).Name : "default";
+            Image = photos?.SingleOrDefault(p => p.IsPoster)?.Name.ToString() ??  "default";
             Description = description;
             Rating = Math.Round(1.0 * likes / (likes + dislikes) * 10, 1);
             Categories = categories.Select(c => new CategoryDto()

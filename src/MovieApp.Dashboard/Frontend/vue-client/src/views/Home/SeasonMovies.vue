@@ -21,6 +21,7 @@
 				v-for="(movie, index) in movies"
 				:key="index" :title="movie.title"
 				:description="movie.description"
+        :movieId="movie.id"
 				:categories="movie.categories"
 				:image="movie.image"
 				:appendClass="'change-item'"
@@ -35,6 +36,10 @@ import MovieItem from '../../components/Movie/MovieItem.vue'
 import ChooseMovie from '../../components/Movie/ChooseMovie.vue'
 import Preloader from "../../components/Preloader.vue";
 import axios from 'axios'
+
+const header = {
+  headers: {"Authorization": "Bearer " + localStorage.getItem('user')}
+}
 
 export default {
 	name: 'SeasonMovies',
@@ -59,13 +64,13 @@ export default {
 		ChooseMovie
 	},
 	created() {
-		axios.get('/dashboard/movies/season/')
+		axios.get('/dashboard/movies/season/', header)
 			.then(r => this.movies = r.data)
       .catch(e => console.error(e))
       .finally(() => this.preloader = false);
 
 		this.emitter.on('chooseMovie', (movieId) => {
-      axios.get(`/dashboard/movies/${movieId}`)
+      axios.get(`/dashboard/movies/${movieId}`, header)
         .then(r => this.movies[this.selectedElement] = r.data);
 		});
 	}

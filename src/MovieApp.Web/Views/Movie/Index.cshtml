@@ -22,7 +22,7 @@
 						<!-- card cover -->
 						<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-5">
 							<div class="card__cover">
-								<img src="img/covers/cover.jpg" alt="">
+								<img src="/image/@Model.Id/@(Model.Poster).jpg" alt="">
 							</div>
 						</div>
 						<!-- end card cover -->
@@ -31,7 +31,7 @@
 						<div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
 							<div class="card__content">
 								<div class="card__wrap">
-									<span class="card__rate"><i class="icon ion-ios-star"></i>@Model.Raiting</span>
+									<span class="card__rate"><i class="icon ion-ios-star"></i>@Model.Rating</span>
 
 									<ul class="card__list">
 										<li>@Model.Qualities.First().Name</li>
@@ -331,59 +331,17 @@
 						<!-- project gallery -->
 						<div class="gallery" itemscope>
 							<div class="row">
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-1.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-1.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 1</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-2.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-2.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 2</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-3.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-3.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 3</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-4.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-4.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 4</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-5.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-5.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 5</figcaption>
-								</figure>
-								<!-- end gallery item -->
-
-								<!-- gallery item -->
-								<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-									<a href="img/gallery/project-6.jpg" itemprop="contentUrl" data-size="1920x1280">
-										<img src="img/gallery/project-6.jpg" itemprop="thumbnail" alt="Image description" />
-									</a>
-									<figcaption itemprop="caption description">Some image caption 6</figcaption>
-								</figure>
-								<!-- end gallery item -->
+								@foreach (var photo in @Model.Photos)
+								{
+									<!-- gallery item -->
+									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
+										<a href="img/gallery/project-1.jpg" itemprop="contentUrl" data-size="1920x1280">
+											<img src="/image/@Model.Id/@(photo.Name).jpg" itemprop="thumbnail" alt="Image description"/>
+										</a>
+										<figcaption itemprop="caption description">@photo.Name</figcaption>
+									</figure>
+									<!-- end gallery item -->
+								}
 							</div>
 						</div>
 						<!-- end project gallery -->

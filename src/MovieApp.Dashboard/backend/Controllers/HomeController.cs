@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.IO;
+using Fall.Core.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Core.Interfaces;
 
@@ -22,10 +24,14 @@ namespace MovieApp.backend.Controllers
         }
 
         //todo remove this
+        [AllowAnonymous]
         [HttpGet("/Image/{image}")]
-        public IActionResult Image(string image)
+        [HttpGet("/Image/{folder:int}/{image}")]
+        public IActionResult Image(int folder = 0, string image = "")
         {
             var mime = image.Substring(image.LastIndexOf('.') + 1);
+            if (folder != 0) image = string.Concat(folder, "/", image);
+            
             return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
     }

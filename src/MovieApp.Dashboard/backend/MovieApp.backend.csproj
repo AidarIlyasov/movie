@@ -19,8 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\MovieApp.Core.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\MovieApp.Infrastructure.csproj" />
     <ProjectReference Include="..\..\MovieApp.Core\MovieApp.Core.csproj" />
     <ProjectReference Include="..\..\MovieApp.Infrastructure\MovieApp.Infrastructure.csproj" />
   </ItemGroup>

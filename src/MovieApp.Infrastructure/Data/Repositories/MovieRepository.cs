@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
@@ -8,10 +9,11 @@ using MovieApp.Core.Interfaces;
 using MovieApp.Core.DTO;
 using MovieApp.Core.DTO.MovieAggregate;
 using MovieApp.Core.Entities.MovieAggregate;
-using MovieApp.Core.Entities;
+using MovieApp.Core.Enums;
 using MovieApp.Core.Helpers;
 using System.Threading.Tasks;
 using System.Text;
+using MovieApp.Core.Entities;
 
 namespace MovieApp.Infrastructure.Data.Repositories
 {
@@ -96,30 +98,56 @@ namespace MovieApp.Infrastructure.Data.Repositories
         {
             return _context.Movies
                 .Where(m => m.Categories.Any(g => g.Id == catId))
-                .Select(m => new ThinMovieDto {
-                    Id = m.Id,
-                    Slug = m.Slug,
-                    Title = m.Title,
-                    Photo = m.Photos.FirstOrDefault(p => p.IsPoster),
-                    Categories = m.Categories.Select(c => new CategoryDto
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                        Link = c.Link
-                    }).ToList()
-                })
+                .Select(m => new ThinMovieDto(m.Id, m.Title, m.Slug, m.Categories, m.Photos, m.Likes, m.Dislikes))
                 .ToList();
         }
 
         public List<PosterMovie> GetSeasonMovies()
         {
             var query = _context.HomePageSettings
-                .AsNoTracking()
                 .Include(x => x.Movie)
-                .Where(x => x.Position == "season");
+                .Where(x => x.PositionId == (int)HomePagePositionsEnum.Season);
 
             return query.Select(m => new PosterMovie(
                 m.Movie.Id, m.Movie.Title, m.Movie.Slug, m.Movie.Photos, m.Movie.Description, m.Movie.Likes, m.Movie.Dislikes, m.Movie.Categories)).ToList();    
+        }
+
+        public List<MovieDto> GetNewMovies()
+        {
+            var query=  _context.HomePageSettings
+                .Include(x => x.Movie)
+                .ThenInclude(r => r.Restriction)
+                .Where(x => x.PositionId == (int)HomePagePositionsEnum.New);
+
+            var rest = query.Select(x => x.Movie.Restriction);
+            
+            return query.Select(x => new MovieDto
+            {
+                Id = x.MovieId,
+                Title = x.Movie.Title,
+                Slug = x.Movie.Slug,
+                Description = x.Movie.Description,
+                Poster = x.Movie.Photos.SingleOrDefault(p => p.IsPoster).Name.ToString(),
+                Categories = x.Movie.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Link = c.Link
+                }).ToList(),
+                Qualities = x.Movie.Qualities.ToList(),
+                Restriction = x.Movie.Restriction,
+                Rating = Math.Round(1.0 * x.Movie.Likes / (x.Movie.Likes + x.Movie.Dislikes) * 10, 1)
+            }).ToList();
+        }
+
+        public List<ThinMovieDto> GetExpectedPremiereMovies()
+        {
+            var query = _context.HomePageSettings
+                .Include(x => x.Movie)
+                .Where(x => x.PositionId == (int)HomePagePositionsEnum.Expected);
+
+            return query.Select(x => new ThinMovieDto(x.Movie.Id, x.Movie.Title, x.Movie.Slug, x.Movie.Categories, x.Movie.Photos, x.Movie.Likes, x.Movie.Dislikes))
+                .ToList();
         }
     }
 }

@@ -186,7 +186,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -235,15 +236,48 @@ namespace MovieApp.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MovieApp.Core.Entities.HomePagePosition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomePagePositions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "season"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "new"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "expected"
+                        });
+                });
+
             modelBuilder.Entity("MovieApp.Core.Entities.HomePageSettings", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Position")
-                        .HasColumnType("text");
+                    b.Property<int>("PositionId")
+                        .HasMaxLength(50)
+                        .HasColumnType("integer");
 
-                    b.HasKey("MovieId", "Position");
+                    b.HasKey("MovieId", "PositionId");
 
                     b.ToTable("HomePageSettings");
 
@@ -251,22 +285,22 @@ namespace MovieApp.Infrastructure.Migrations
                         new
                         {
                             MovieId = 2,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 3,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 4,
-                            Position = "season"
+                            PositionId = 1
                         },
                         new
                         {
                             MovieId = 5,
-                            Position = "season"
+                            PositionId = 1
                         });
                 });
 
@@ -386,13 +420,12 @@ namespace MovieApp.Infrastructure.Migrations
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                    b.Property<int>("Name")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId", "IsPoster")
-                        .IsUnique();
+                    b.HasIndex("MovieId");
 
                     b.ToTable("Photos");
                 });
@@ -405,7 +438,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -436,8 +470,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("Link")
-                        .HasColumnType("text");
+                    b.Property<int>("Link")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -450,37 +484,37 @@ namespace MovieApp.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Link = "2",
+                            Link = 2,
                             Name = "21+"
                         },
                         new
                         {
                             Id = 2,
-                            Link = "18",
+                            Link = 18,
                             Name = "18+"
                         },
                         new
                         {
                             Id = 3,
-                            Link = "16",
+                            Link = 16,
                             Name = "16+"
                         },
                         new
                         {
                             Id = 4,
-                            Link = "14",
+                            Link = 14,
                             Name = "14+"
                         },
                         new
                         {
                             Id = 5,
-                            Link = "12",
+                            Link = 12,
                             Name = "12+"
                         },
                         new
                         {
                             Id = 6,
-                            Link = "6",
+                            Link = 6,
                             Name = "6+"
                         });
                 });
@@ -511,7 +545,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
@@ -533,7 +568,8 @@ namespace MovieApp.Infrastructure.Migrations
                         .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -563,13 +599,19 @@ namespace MovieApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Login")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("RoleId")
                         .HasColumnType("integer");

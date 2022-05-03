@@ -133,9 +133,11 @@ $(document).ready(function () {
 
 	$('.filter__item-menu li').on('click', function() {
 		var text = $(this).text();
+		var itemId = $(this).attr('data-id');
 		var item = $(this);
 		var id = item.closest('.filter__item').attr('id');
-		$('#'+id).find('.filter__item-btn input').val(text);
+		$('#'+id).find('.filter__item-btn input[type="button"]').val(text);
+		$('#'+id).find('.filter__item-btn input[type="hidden"]').val(itemId);
 	});
 
 	/*==============================
@@ -407,8 +409,15 @@ $(document).ready(function () {
 				document.getElementById('filter__years-start'),
 				document.getElementById('filter__years-end')
 			];
+			
+			var inputValues = [
+				document.getElementById('input__years-start'),
+				document.getElementById('input__years-end')
+			];
+			
 			firstSlider.noUiSlider.on('update', function( values, handle ) {
 				firstValues[handle].innerHTML = values[handle];
+				inputValues[handle].value = values[handle];
 			});
 		} else {
 			return false;
@@ -483,3 +492,46 @@ $(document).ready(function () {
 	}
 	$(window).on('load', initializeThirdSlider());
 });
+
+/*4*/
+function initializeFourthSlider() {
+	if ($('#filter__restriction').length) {
+		var firstSlider = document.getElementById('filter__restrictions');
+		var minRestriction = $('#filter__restrictions-start').attr('data-restriction');
+		var maxRestriction = $('#filter__restrictions-end').attr('data-restriction');
+		console.log({
+			'min': +minRestriction,
+			'max': +maxRestriction
+		});
+		noUiSlider.create(firstSlider, {
+			range: {
+				'min': +minRestriction,
+				'max': +maxRestriction
+			},
+			step: 1,
+			connect: true,
+			start: [minRestriction, maxRestriction],
+			format: wNumb({
+				decimals: 0,
+			})
+		});
+		var firstValues = [
+			document.getElementById('filter__restrictions-start'),
+			document.getElementById('filter__restrictions-end')
+		];
+
+		var inputValues = [
+			document.getElementById('input__restrictions-start'),
+			document.getElementById('input__restrictions-end')
+		];
+
+		firstSlider.noUiSlider.on('update', function( values, handle ) {
+			firstValues[handle].innerHTML = `${values[handle]}+`;
+			inputValues[handle].value = values[handle];
+		});
+	} else {
+		return false;
+	}
+	return false;
+}
+$(window).on('load', initializeFourthSlider());

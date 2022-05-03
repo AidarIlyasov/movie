@@ -12,9 +12,7 @@ namespace MovieApp.Core.Validators
                 .Length(2, 50);
 
             RuleFor(r => r.Link)
-                .NotEmpty()
-                .Length(1, 50)
-                .Matches("^[a-zA-Z0-9]*$");
+                .NotEmpty();
         }
     }
 }

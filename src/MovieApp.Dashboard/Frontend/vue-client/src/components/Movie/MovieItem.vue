@@ -3,7 +3,9 @@
     <slot></slot>
     <div class="movie-card card">
       
-        <img :src="'/image/' + image + '.jpg'" class="card-img-top">
+        <div class="movie-card_image">
+          <div class="movie-card_photo" :style="'background: url(/image/'+movieId+'/'+image+'.jpg) center / cover'"></div>
+        </div>
         <div class="card-body">
           <a href="/dashboard/movie/{1}"><h5 class="card-title">{{title}}</h5></a>
           <p class="card-text">{{description}}</p>
@@ -20,6 +22,7 @@
 export default {
   name: "MovieItem",
   props: {
+    movieId: {type: Number, default: 2},
     title: {type: String},
     description: {type: String},
     categories: {type: Array},
@@ -67,5 +70,15 @@ export default {
     width: 100%;
     height: 50px;
     background: rgba(3, 3, 3, .8);
+  }
+  .movie-card_image, .movie-card_photo {
+    min-height: 250px;
+  }
+  .movie-card_photo:hover {
+    transition: .3s;
+    min-height: 450px;
+    position: absolute;
+    z-index: 5;
+    width: 100%;
   }
 </style>

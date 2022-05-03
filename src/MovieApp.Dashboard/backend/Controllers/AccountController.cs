@@ -62,7 +62,8 @@ namespace MovieApp.backend.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name),
+                    new Claim(ClaimTypes.Name, user.Login),
                 };
                 var claimsIdentity =
                     new ClaimsIdentity(claims, "Token", 

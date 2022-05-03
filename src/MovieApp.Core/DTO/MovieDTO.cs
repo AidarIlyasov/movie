@@ -10,11 +10,12 @@ namespace MovieApp.Core.DTO
         public int Id {get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public double Raiting { get; set; }
+        public double Rating { get; set; }
         public float Duration { get; set; }
         public string Slug { get; set; }
         public String Release { get; set; }
         public Restriction Restriction { get; set; }
+        public string Poster { get; set; } = "default";
 
         public List<Country> Countries { get; set; }
         public List<Quality> Qualities { get; set; }

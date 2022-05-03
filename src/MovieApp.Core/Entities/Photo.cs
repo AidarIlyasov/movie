@@ -9,7 +9,7 @@ namespace MovieApp.Core.Entities
     public class Photo
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int Name { get; set; } = 0;
         public int MovieId { get; set; }
         public bool IsPoster { get; set; } = false;
         [BindNever]

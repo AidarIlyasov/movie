@@ -4,7 +4,9 @@
     <MovieItem 
       v-for="(movie, index) in movies"
       :key="index"
+      :movieId="movie.id"
       :title="movie.title"
+      :image="movie.image"
       :description="movie.description"
       :categories="movie.categories"
       :appendClass="'change-item'"
@@ -65,7 +67,7 @@
       Preloader
     },
     created() {
-      if (this.$route.params) {
+      if (Object.keys(this.$route.params).length !== 0) {
         this.getFilteredMovies()
       } else {
         this.getSeasonMovies();
