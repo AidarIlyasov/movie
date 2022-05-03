@@ -1,0 +1,42 @@
+﻿@{
+	Layout = "~/Views/Shared/_AuthPageLayout.cshtml";
+}
+@model MovieApp.Web.ViewModels.LoginModel
+<div class="sign section--bg" data-bg="/content/static/section/section.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="sign__content">
+					<!-- authorization form -->
+					<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true" class="sign__form">
+						<a asp-controller="Home" asp-action="Index" class="sign__logo">
+							<img src="~/content/static/logo.svg">
+						</a>
+
+						<div class="sign__group">
+							<input type="text" asp-for="Email" class="sign__input" placeholder="Email">
+							<span asp-validation-for="Email" />
+						</div>
+
+						<div class="sign__group">
+							<input asp-for="Password" class="sign__input" placeholder="Password">
+							<span asp-validation-for="Password" />
+						</div>
+
+						<div class="sign__group sign__group--checkbox">
+							<input id="remember" name="remember" type="checkbox" checked="checked">
+							<label for="remember">Remember Me</label>
+						</div>
+							
+						<button class="sign__btn" type="submit">Sign in</button>
+
+						<span class="sign__text">Don't have an account? <a asp-action="Register" asp-controller="Account">Sign up!</a></span>
+
+						<span class="sign__text"><a href="#">Forgot password?</a></span>
+					</form>
+					<!-- end authorization form -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
